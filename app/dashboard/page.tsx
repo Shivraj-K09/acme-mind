@@ -1,26 +1,52 @@
-import type { Metadata } from "next"
-import { redirect } from "next/navigation"
-import { LifeBuoy } from "lucide-react"
+import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 
-import { createClient } from "@/lib/supabase/server"
-import { SignOutButton } from "@/components/sign-out-button"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { createClient } from "@/lib/supabase/server";
+import { SignOutButton } from "@/components/sign-out-button";
+import { AdminDashboard } from "@/components/dashboard/admin/admin-dashboard";
+import { ClientDashboard } from "@/components/dashboard/client/client-dashboard";
+import { CoordinatorDashboard } from "@/components/dashboard/coordinator/coordinator-dashboard";
+import { TherapistDashboard } from "@/components/dashboard/therapist/therapist-dashboard";
 
 export const metadata: Metadata = {
   title: "Dashboard",
-}
+};
+
+const ROLES = ["CLIENT", "THERAPIST", "COORDINATOR", "ADMIN"] as const;
+
+type Role = (typeof ROLES)[number];
+
+const ROLE_DASHBOARDS: Record<Role, React.ComponentType<{ name: string }>> = {
+  CLIENT: ClientDashboard,
+  THERAPIST: TherapistDashboard,
+  COORDINATOR: CoordinatorDashboard,
+  ADMIN: AdminDashboard,
+};
 
 export default async function DashboardPage() {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
-  const { data } = await supabase.auth.getUser()
+  const { data } = await supabase.auth.getUser();
 
   if (!data.user) {
-    redirect("/login")
+    redirect("/login");
   }
 
-  const fullName = data.user.user_metadata.full_name as string | undefined
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("full_name, role")
+    .eq("id", data.user.id)
+    .maybeSingle();
+
+  if (!profile) {
+    redirect("/login");
+  }
+
+  const role: Role = ROLES.includes(profile.role as Role)
+    ? (profile.role as Role)
+    : "CLIENT";
+
+  const Dashboard = ROLE_DASHBOARDS[role];
 
   return (
     <div className="flex min-h-svh flex-col">
@@ -29,26 +55,8 @@ export default async function DashboardPage() {
         <SignOutButton />
       </header>
       <main className="flex flex-1 items-center justify-center px-6 py-12">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle className="text-2xl">
-              Welcome{fullName ? `, ${fullName}` : ""}
-            </CardTitle>
-            <CardDescription>
-              Looking for the right therapist?
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-6">
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              Connect with our care coordinator to discuss your needs and get
-              matched with the therapist that fits you best.
-            </p>
-            <Button size="lg" className="h-11 w-full rounded-xl">
-              <LifeBuoy data-icon="inline-start" /> Contact Coordinator
-            </Button>
-          </CardContent>
-        </Card>
+        <Dashboard name={profile.full_name} />
       </main>
     </div>
-  )
+  );
 }
