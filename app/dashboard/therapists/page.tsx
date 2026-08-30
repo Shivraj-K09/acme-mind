@@ -8,7 +8,7 @@ type TherapistRow = {
   profiles: {
     full_name: string;
     email: string;
-  };
+  } | null;
 };
 
 export default async function TherapistsPage() {
@@ -38,10 +38,10 @@ export default async function TherapistsPage() {
             >
               <div>
                 <p className="text-sm font-medium">
-                  {therapist.profiles.full_name}
+                  {therapist.profiles?.full_name ?? "Unnamed therapist"}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  {therapist.profiles.email}
+                  {therapist.profiles?.email ?? "—"}
                 </p>
               </div>
               <div className="text-right">

@@ -9,13 +9,30 @@ export const metadata: Metadata = {
   title: "Dashboard",
 };
 
-const COORDINATOR_NAV: NavItem[] = [
-  { href: "/dashboard", label: "Dashboard" },
-  { href: "/dashboard/clients", label: "Clients" },
-  { href: "/dashboard/therapists", label: "Therapists" },
-  { href: "/dashboard/recommendations", label: "Recommendations" },
-  { href: "/dashboard/bookings", label: "Bookings" },
-];
+const NAV_BY_ROLE: Record<
+  "COORDINATOR" | "THERAPIST" | "ADMIN",
+  NavItem[]
+> = {
+  COORDINATOR: [
+    { href: "/dashboard", label: "Dashboard" },
+    { href: "/dashboard/clients", label: "Clients" },
+    { href: "/dashboard/therapists", label: "Therapists" },
+    { href: "/dashboard/recommendations", label: "Recommendations" },
+    { href: "/dashboard/bookings", label: "Bookings" },
+  ],
+  THERAPIST: [
+    { href: "/dashboard", label: "Dashboard" },
+    { href: "/dashboard/bookings", label: "Bookings" },
+    { href: "/dashboard/profile", label: "Profile" },
+  ],
+  ADMIN: [
+    { href: "/dashboard", label: "Dashboard" },
+    { href: "/dashboard/clients", label: "Clients" },
+    { href: "/dashboard/therapists", label: "Therapists" },
+    { href: "/dashboard/recommendations", label: "Recommendations" },
+    { href: "/dashboard/bookings", label: "Bookings" },
+  ],
+};
 
 export default async function DashboardLayout({
   children,
@@ -40,7 +57,5 @@ export default async function DashboardLayout({
     );
   }
 
-  return (
-    <Shell nav={COORDINATOR_NAV}>{children}</Shell>
-  );
+  return <Shell nav={NAV_BY_ROLE[role]}>{children}</Shell>;
 }

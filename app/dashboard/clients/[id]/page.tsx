@@ -22,7 +22,7 @@ type ClientRow = {
     full_name: string;
     email: string;
     phone: string | null;
-  };
+  } | null;
 };
 
 type RecommendationRow = {
@@ -34,7 +34,7 @@ type RecommendationRow = {
     experience_years: number;
     profiles: {
       full_name: string;
-    };
+    } | null;
   };
 };
 
@@ -43,7 +43,7 @@ type TherapistRow = {
   specialization: string;
   profiles: {
     full_name: string;
-  };
+  } | null;
 };
 
 export default async function ClientDetailPage({
@@ -72,7 +72,7 @@ export default async function ClientDetailPage({
     .select(
       "id, therapist_id, status, therapists(specialization, experience_years, profiles(full_name))"
     )
-    .eq("client_id", id)
+    .eq("client_id", client.id)
     .order("created_at", { ascending: false });
 
   const recommendations = (recommendationData ??
@@ -93,7 +93,9 @@ export default async function ClientDetailPage({
     )
     .map((therapist) => ({
       id: therapist.id,
-      label: `${therapist.profiles.full_name} — ${therapist.specialization}`,
+      label: `${therapist.profiles?.full_name ?? "Therapist"} — ${
+        therapist.specialization || "General therapy"
+      }`,
     }));
 
   return (
@@ -112,7 +114,7 @@ export default async function ClientDetailPage({
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">
-            {client.profiles.full_name || "Unnamed client"}
+            {client.profiles?.full_name ?? "Unnamed client"}
           </CardTitle>
           <CardDescription>
             Client since{" "}
@@ -126,11 +128,11 @@ export default async function ClientDetailPage({
         <CardContent className="flex flex-col gap-1 text-sm">
           <p>
             <span className="text-muted-foreground">Email: </span>
-            {client.profiles.email}
+            {client.profiles?.email ?? "—"}
           </p>
           <p>
             <span className="text-muted-foreground">Phone: </span>
-            {client.profiles.phone || "—"}
+            {client.profiles?.phone ?? "—"}
           </p>
         </CardContent>
       </Card>
@@ -143,7 +145,10 @@ export default async function ClientDetailPage({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <RecommendTherapistForm clientId={client.id} therapists={therapistOptions} />
+          <RecommendTherapistForm
+            clientId={client.id}
+            therapists={therapistOptions}
+          />
         </CardContent>
       </Card>
 
@@ -163,7 +168,8 @@ export default async function ClientDetailPage({
               >
                 <div>
                   <p className="text-sm font-medium">
-                    {recommendation.therapists.profiles.full_name}
+                    {recommendation.therapists.profiles?.full_name ??
+                      "Unknown therapist"}
                   </p>
                   <p className="text-sm text-muted-foreground">
                     {recommendation.therapists.specialization} ·{" "}

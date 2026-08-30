@@ -82,10 +82,10 @@ export default async function ClientsPage({
               >
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium">
-                    {client.profiles.full_name || "Unnamed client"}
+                    {client.profiles?.full_name ?? "Unnamed client"}
                   </p>
                   <p className="truncate text-sm text-muted-foreground">
-                    {client.profiles.email}
+                    {client.profiles?.email ?? "—"}
                   </p>
                 </div>
                 <div className="flex shrink-0 items-center gap-4">

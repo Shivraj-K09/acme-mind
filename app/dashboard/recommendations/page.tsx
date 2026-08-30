@@ -48,8 +48,8 @@ export default async function RecommendationsPage() {
             >
               <div>
                 <p className="text-sm font-medium">
-                  {recommendation.clients.profiles.full_name} →{" "}
-                  {recommendation.therapists.profiles.full_name}
+                  {recommendation.clients?.profiles?.full_name ?? "Unknown client"}{" "}
+                  → {recommendation.therapists?.profiles?.full_name ?? "Unknown therapist"}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {new Date(recommendation.created_at).toLocaleDateString(

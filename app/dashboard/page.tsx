@@ -4,9 +4,13 @@ import { ClientDashboard } from "@/components/dashboard/client/client-dashboard"
 import { CoordinatorDashboard } from "@/components/dashboard/coordinator/coordinator-dashboard";
 import { TherapistDashboard } from "@/components/dashboard/therapist/therapist-dashboard";
 
+type DashboardComponent = (props: {
+  name: string;
+}) => Promise<React.ReactNode> | React.ReactNode;
+
 const ROLE_DASHBOARDS: Record<
   "CLIENT" | "THERAPIST" | "COORDINATOR" | "ADMIN",
-  React.ComponentType<{ name: string }>
+  DashboardComponent
 > = {
   CLIENT: ClientDashboard,
   THERAPIST: TherapistDashboard,
