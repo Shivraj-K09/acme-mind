@@ -106,7 +106,7 @@ export function CreateClientForm({
           className="h-11 w-full rounded-xl"
           disabled={pending}
         >
-          {pending ? "Creating account…" : "Create account & send invite"}
+          {pending ? "Creating account..." : "Create account & send invite"}
         </Button>
       </FieldGroup>
     </form>

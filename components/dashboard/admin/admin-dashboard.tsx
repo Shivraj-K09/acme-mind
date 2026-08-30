@@ -13,7 +13,7 @@ export function AdminDashboard({ name }: { name: string }) {
       <CardContent className="flex flex-col gap-6">
         <p className="text-sm leading-relaxed text-muted-foreground">
           Full visibility across clients, therapists, coordinators, bookings,
-          and payments — manage the platform from here.
+          and payments - manage the platform from here.
         </p>
         <div className="flex flex-col gap-3">
           <Button size="lg" className="h-11 w-full rounded-xl">

@@ -41,7 +41,7 @@ export default async function TherapistsPage() {
                   {therapist.profiles?.full_name ?? "Unnamed therapist"}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  {therapist.profiles?.email ?? "—"}
+                  {therapist.profiles?.email ?? "-"}
                 </p>
               </div>
               <div className="text-right">

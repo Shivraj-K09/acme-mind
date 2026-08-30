@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 
-import { payBooking, SESSION_PRICE } from "@/app/actions/bookings";
+import { payBooking } from "@/app/actions/bookings";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
 
@@ -39,7 +39,7 @@ export function PayButton({ bookingId }: { bookingId: string }) {
         })
       }
     >
-      {pending ? "Paying…" : `Pay now · $${SESSION_PRICE}`}
+      {pending ? "Paying..." : "Pay now - $50"}
     </Button>
   );
 }

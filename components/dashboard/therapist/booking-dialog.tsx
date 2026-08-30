@@ -63,7 +63,7 @@ export function BookingDialog({
           <DialogTitle>Confirm your session</DialogTitle>
           <DialogDescription>
             {slotLabel}
-            {" "}— you will complete the payment after booking.
+            {" "}- you will complete the payment after booking.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
@@ -74,7 +74,7 @@ export function BookingDialog({
             onClick={handleConfirm}
             disabled={pending}
           >
-            {pending ? "Booking…" : "Confirm booking"}
+            {pending ? "Booking..." : "Confirm booking"}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -93,7 +93,7 @@ export default async function ClientDetailPage({
     )
     .map((therapist) => ({
       id: therapist.id,
-      label: `${therapist.profiles?.full_name ?? "Therapist"} — ${
+      label: `${therapist.profiles?.full_name ?? "Therapist"} - ${
         therapist.specialization || "General therapy"
       }`,
     }));
@@ -107,7 +107,7 @@ export default async function ClientDetailPage({
           nativeButton={false}
           render={<Link href="/dashboard/clients" />}
         >
-          ← Back to clients
+          {"<-"} Back to clients
         </Button>
       </div>
 
@@ -128,11 +128,11 @@ export default async function ClientDetailPage({
         <CardContent className="flex flex-col gap-1 text-sm">
           <p>
             <span className="text-muted-foreground">Email: </span>
-            {client.profiles?.email ?? "—"}
+            {client.profiles?.email ?? "-"}
           </p>
           <p>
             <span className="text-muted-foreground">Phone: </span>
-            {client.profiles?.phone ?? "—"}
+            {client.profiles?.phone ?? "-"}
           </p>
         </CardContent>
       </Card>
@@ -172,7 +172,7 @@ export default async function ClientDetailPage({
                       "Unknown therapist"}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    {recommendation.therapists.specialization} ·{" "}
+                    {recommendation.therapists.specialization} -{" "}
                     {recommendation.therapists.experience_years} yrs experience
                   </p>
                 </div>

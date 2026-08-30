@@ -5,7 +5,7 @@ import { Vine } from "@/components/vine";
 
 export const metadata: Metadata = {
   title: {
-    template: "%s — Acme Mind",
+    template: "%s - Acme Mind",
     default: "Acme Mind",
   },
 };

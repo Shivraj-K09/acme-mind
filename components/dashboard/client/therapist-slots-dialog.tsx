@@ -58,7 +58,7 @@ export function TherapistSlotsDialog({
     toast.add({
       type: "success",
       title: "Session booked",
-      description: `${slot.label} — complete the payment to confirm.`,
+      description: `${slot.label} - complete the payment to confirm.`,
     });
 
     setSlots((current) => current.filter((s) => s.id !== slot.id));
@@ -80,7 +80,7 @@ export function TherapistSlotsDialog({
             {therapistName}
           </DialogTitle>
           <DialogDescription>
-            {specialization} · {experienceYears} yrs experience
+            {specialization} - {experienceYears} yrs experience
           </DialogDescription>
         </DialogHeader>
         {bio ? (
@@ -102,7 +102,7 @@ export function TherapistSlotsDialog({
                   disabled={pendingId !== null}
                   onClick={() => book(slot)}
                 >
-                  {pendingId === slot.id ? "Booking…" : "Book"}
+                  {pendingId === slot.id ? "Booking..." : "Book"}
                 </Button>
               </div>
             ))

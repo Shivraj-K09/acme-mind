@@ -100,7 +100,7 @@ export function SetPasswordForm() {
           className="h-11 w-full rounded-xl"
           disabled={pending}
         >
-          {pending ? "Saving…" : "Set password & continue"}
+          {pending ? "Saving..." : "Set password & continue"}
         </Button>
       </FieldGroup>
     </form>

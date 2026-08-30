@@ -181,7 +181,7 @@ export function LoginForm() {
           className="h-11 w-full rounded-xl"
           disabled={pending}
         >
-          {pending ? "Signing in…" : "Sign in"}
+          {pending ? "Signing in..." : "Sign in"}
         </Button>
       </FieldGroup>
     </form>

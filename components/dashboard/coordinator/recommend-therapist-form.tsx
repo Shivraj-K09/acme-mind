@@ -84,7 +84,7 @@ export function RecommendTherapistForm({
             therapists.find((therapist) => therapist.id === therapistId)
               ?.label
           ) : (
-            <span className="text-muted-foreground">Choose a therapist…</span>
+            <span className="text-muted-foreground">Choose a therapist...</span>
           )}
         </SelectTrigger>
         <SelectContent>
@@ -101,7 +101,7 @@ export function RecommendTherapistForm({
         className="h-11 rounded-xl"
         disabled={pending || !therapistId}
       >
-        {pending ? "Recommending…" : "Recommend"}
+        {pending ? "Recommending..." : "Recommend"}
       </Button>
     </form>
   );

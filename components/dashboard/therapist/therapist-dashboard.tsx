@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { AddAvailabilityForm } from "@/components/dashboard/therapist/add-availability-form";
+import { BookingActions } from "@/components/dashboard/booking-actions";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -22,6 +23,7 @@ type BookingStatus =
 
 type BookingRow = {
   id: string;
+  therapist_id: string;
   status: BookingStatus;
   scheduled_start: string;
   clients: {
@@ -56,6 +58,7 @@ export async function TherapistDashboard({ name }: { name: string }) {
 
   let slots: SlotRow[] = [];
   let bookings: BookingRow[] = [];
+  let therapistId: string | null = null;
 
   if (userData.user) {
     const { data: therapist } = await supabase
@@ -65,6 +68,7 @@ export async function TherapistDashboard({ name }: { name: string }) {
       .maybeSingle();
 
     if (therapist) {
+      therapistId = therapist.id;
       const { data: slotData } = await supabase
         .from("availability_slots")
         .select("id, start_time, end_time, status")
@@ -76,7 +80,7 @@ export async function TherapistDashboard({ name }: { name: string }) {
 
       const { data: bookingData } = await supabase
         .from("bookings")
-        .select("id, status, scheduled_start, clients(profiles(full_name))")
+        .select("id, therapist_id, status, scheduled_start, clients(profiles(full_name))")
         .eq("therapist_id", therapist.id)
         .order("scheduled_start", { ascending: false })
         .limit(10);
@@ -127,7 +131,7 @@ export async function TherapistDashboard({ name }: { name: string }) {
                     hour: "numeric",
                     minute: "2-digit",
                   })}{" "}
-                  –{" "}
+                  -{" "}
                   {new Date(slot.end_time).toLocaleTimeString("en-US", {
                     hour: "numeric",
                     minute: "2-digit",
@@ -174,9 +178,20 @@ export async function TherapistDashboard({ name }: { name: string }) {
                     })}
                   </p>
                 </div>
-                <Badge className={`shrink-0 ${BOOKING_BADGES[booking.status]}`}>
-                  {booking.status}
-                </Badge>
+                <div className="flex flex-col items-end gap-2">
+                  <Badge
+                    className={`shrink-0 ${BOOKING_BADGES[booking.status]}`}
+                  >
+                    {booking.status}
+                  </Badge>
+                  {booking.status === "PENDING" ||
+                  booking.status === "CONFIRMED" ? (
+                    <BookingActions
+                      bookingId={booking.id}
+                      therapistId={therapistId ?? ""}
+                    />
+                  ) : null}
+                </div>
               </div>
             ))
           ) : (

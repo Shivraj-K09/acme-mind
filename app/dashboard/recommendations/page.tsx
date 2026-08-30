@@ -36,7 +36,7 @@ export default async function RecommendationsPage() {
       <CardHeader>
         <CardTitle>Recommendations</CardTitle>
         <CardDescription>
-          Every client–therapist match made so far, with its status.
+          Every client-therapist match made so far, with its status.
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-2">
@@ -49,7 +49,7 @@ export default async function RecommendationsPage() {
               <div>
                 <p className="text-sm font-medium">
                   {recommendation.clients?.profiles?.full_name ?? "Unknown client"}{" "}
-                  → {recommendation.therapists?.profiles?.full_name ?? "Unknown therapist"}
+                  {"->"} {recommendation.therapists?.profiles?.full_name ?? "Unknown therapist"}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {new Date(recommendation.created_at).toLocaleDateString(

@@ -29,8 +29,10 @@ const NAV_BY_ROLE: Record<
     { href: "/dashboard", label: "Dashboard" },
     { href: "/dashboard/clients", label: "Clients" },
     { href: "/dashboard/therapists", label: "Therapists" },
+    { href: "/dashboard/coordinators", label: "Coordinators" },
     { href: "/dashboard/recommendations", label: "Recommendations" },
     { href: "/dashboard/bookings", label: "Bookings" },
+    { href: "/dashboard/payments", label: "Payments" },
   ],
 };
 

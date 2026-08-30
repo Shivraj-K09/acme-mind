@@ -52,7 +52,7 @@ const inviteClientSchema = z.object({
 
 /**
  * Creates a pending CLIENT account and emails the user an invite link.
- * The client sets their own password through the link — the coordinator
+ * The client sets their own password through the link - the coordinator
  * never handles passwords.
  */
 export async function inviteClient(input: {

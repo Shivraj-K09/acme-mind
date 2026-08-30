@@ -107,7 +107,7 @@ export function AddAvailabilityForm() {
                 {date ? (
                   format(date, "MMM d, yyyy")
                 ) : (
-                  <span>Pick a date…</span>
+                  <span>Pick a date...</span>
                 )}
               </Button>
             }
@@ -136,7 +136,7 @@ export function AddAvailabilityForm() {
             {startTime ? (
               formatTimeLabel(startTime)
             ) : (
-              <span>Start time…</span>
+              <span>Start time...</span>
             )}
           </SelectTrigger>
           <SelectContent className="min-w-0 max-h-72 w-(--anchor-width) [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -153,7 +153,7 @@ export function AddAvailabilityForm() {
           onValueChange={(value) => setEndTime((value as string) ?? "")}
         >
           <SelectTrigger className="h-9! flex-1 rounded-xl bg-muted/50 py-0 text-muted-foreground sm:w-auto sm:flex-none">
-            {endTime ? formatTimeLabel(endTime) : <span>End time…</span>}
+            {endTime ? formatTimeLabel(endTime) : <span>End time...</span>}
           </SelectTrigger>
           <SelectContent className="min-w-0 max-h-72 w-(--anchor-width) [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {TIME_OPTIONS.map((time) => (
@@ -170,7 +170,7 @@ export function AddAvailabilityForm() {
           className="h-9! rounded-xl"
           disabled={pending}
         >
-          {pending ? "Adding…" : "Add slot"}
+          {pending ? "Adding..." : "Add slot"}
         </Button>
       </div>
     </form>

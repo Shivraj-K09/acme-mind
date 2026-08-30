@@ -214,7 +214,7 @@ export function RegisterForm() {
           className="h-11 w-full rounded-xl"
           disabled={pending}
         >
-          {pending ? "Creating account…" : "Create account"}
+          {pending ? "Creating account..." : "Create account"}
         </Button>
       </FieldGroup>
     </form>

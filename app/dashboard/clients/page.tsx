@@ -56,7 +56,7 @@ export default async function ClientsPage({
             <Input
               name="email"
               type="email"
-              placeholder="Search by email…"
+              placeholder="Search by email..."
               defaultValue={searchTerm}
               className="h-11 rounded-xl bg-muted/50"
             />
@@ -70,7 +70,7 @@ export default async function ClientsPage({
       <Card>
         <CardHeader>
           <CardTitle className="text-base">
-            {searchTerm ? `Results for “${searchTerm}”` : "All clients"}
+            {searchTerm ? `Results for "${searchTerm}"` : "All clients"}
           </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-2">
@@ -85,7 +85,7 @@ export default async function ClientsPage({
                     {client.profiles?.full_name ?? "Unnamed client"}
                   </p>
                   <p className="truncate text-sm text-muted-foreground">
-                    {client.profiles?.email ?? "—"}
+                    {client.profiles?.email ?? "-"}
                   </p>
                 </div>
                 <div className="flex shrink-0 items-center gap-4">

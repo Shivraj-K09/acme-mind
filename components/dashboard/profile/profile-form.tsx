@@ -111,7 +111,7 @@ export function ProfileForm({ defaults }: { defaults: ProfileFormDefaults }) {
             name="bio"
             rows={4}
             defaultValue={defaults.bio}
-            placeholder="Tell clients about your approach…"
+            placeholder="Tell clients about your approach..."
             className="rounded-xl bg-muted/50"
           />
         </Field>
@@ -121,7 +121,7 @@ export function ProfileForm({ defaults }: { defaults: ProfileFormDefaults }) {
           className="h-11 w-full rounded-xl"
           disabled={pending}
         >
-          {pending ? "Saving…" : "Save changes"}
+          {pending ? "Saving..." : "Save changes"}
         </Button>
       </FieldGroup>
     </form>

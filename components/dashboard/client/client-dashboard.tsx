@@ -1,6 +1,7 @@
 import { LifeBuoy } from "lucide-react";
 
 import { createClient } from "@/lib/supabase/server";
+import { BookingActions } from "@/components/dashboard/booking-actions";
 import { PayButton } from "@/components/dashboard/client/pay-button";
 import { RespondButtons } from "@/components/dashboard/client/respond-buttons";
 import { TherapistSlotsDialog } from "@/components/dashboard/client/therapist-slots-dialog";
@@ -47,6 +48,7 @@ type ClientBookingRow = {
   id: string;
   status: BookingStatus;
   scheduled_start: string;
+  therapist_id: string;
   therapists: {
     profiles: {
       full_name: string;
@@ -75,7 +77,7 @@ function formatSlotLabel(start: string, end: string) {
     month: "short",
     hour: "numeric",
     minute: "2-digit",
-  })} – ${new Date(end).toLocaleTimeString("en-US", {
+  })} - ${new Date(end).toLocaleTimeString("en-US", {
     hour: "numeric",
     minute: "2-digit",
   })}`;
@@ -118,7 +120,7 @@ export async function ClientDashboard({ name }: { name: string }) {
     const { data: bookingData } = await supabase
       .from("bookings")
       .select(
-        "id, status, scheduled_start, therapists(profiles(full_name))"
+        "id, status, scheduled_start, therapist_id, therapists(profiles(full_name))"
       )
       .order("scheduled_start", { ascending: true });
 
@@ -293,15 +295,23 @@ export async function ClientDashboard({ name }: { name: string }) {
                       )}
                     </p>
                   </div>
-                  {booking.status === "PENDING" ? (
-                    <PayButton bookingId={booking.id} />
-                  ) : (
+                  <div className="flex flex-col items-end gap-2">
                     <Badge
                       className={`shrink-0 ${STATUS_BADGES[booking.status] ?? ""}`}
                     >
                       {booking.status}
                     </Badge>
-                  )}
+                    {booking.status === "PENDING" ? (
+                      <PayButton bookingId={booking.id} />
+                    ) : null}
+                    {booking.status === "PENDING" ||
+                    booking.status === "CONFIRMED" ? (
+                      <BookingActions
+                        bookingId={booking.id}
+                        therapistId={booking.therapist_id}
+                      />
+                    ) : null}
+                  </div>
                 </div>
               ))}
             </CardContent>
