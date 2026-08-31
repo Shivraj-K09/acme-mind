@@ -3,14 +3,8 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, ArrowRight, Calendar } from "lucide-react";
-import type { RecommendationStatus, RecommendationRow } from "@/types";
-
-const STATUS_BADGES: Record<RecommendationStatus, string> = {
-  PENDING: "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300",
-  ACCEPTED:
-    "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
-  REJECTED: "bg-muted text-muted-foreground",
-};
+import type { RecommendationRow } from "@/types";
+import { STATUS_BADGES } from "@/constants";
 
 function getPersonName(
   profile?: { full_name?: string | null; email?: string | null } | null,

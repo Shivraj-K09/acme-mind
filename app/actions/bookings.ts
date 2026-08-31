@@ -4,6 +4,7 @@ import { z } from "zod";
 import { createClient as createSupabaseAdminClient } from "@supabase/supabase-js";
 
 import { createClient } from "@/lib/supabase/server";
+import { SESSION_PRICE } from "@/constants";
 
 /**
  * Creates a PENDING booking for the selected slot. Slot availability, the
@@ -56,8 +57,6 @@ export async function createBooking(
 
   return {};
 }
-
-const SESSION_PRICE = 50;
 
 /**
  * Mock payment: records a PAID payment row (service role, since payment

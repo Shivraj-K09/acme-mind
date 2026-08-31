@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ElementType } from "react";
 import {
-  LayoutDashboard,
   Users,
   HeartHandshake,
   ShieldCheck,
@@ -17,17 +16,7 @@ import {
 
 import { cn } from "@/lib/utils";
 import type { NavItem } from "@/types";
-
-const ROUTE_ICONS: Record<string, ElementType> = {
-  "/dashboard": LayoutDashboard,
-  "/dashboard/clients": Users,
-  "/dashboard/therapists": HeartHandshake,
-  "/dashboard/coordinators": ShieldCheck,
-  "/dashboard/recommendations": Sparkles,
-  "/dashboard/bookings": Calendar,
-  "/dashboard/payments": CreditCard,
-  "/dashboard/profile": User,
-};
+import { ROUTE_ICONS } from "@/constants";
 
 function getNavIcon(item: NavItem): ElementType {
   if (item.icon) return item.icon;

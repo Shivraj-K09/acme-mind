@@ -7,7 +7,6 @@ import { createClient } from "@/lib/supabase/server";
 
 async function requireAdminClient() {
   const supabase = await createClient();
-
   const { data: userData } = await supabase.auth.getUser();
 
   if (!userData.user) {
@@ -33,15 +32,15 @@ async function requireAdminClient() {
  */
 export async function markBooking(
   bookingId: string,
-  status: "COMPLETED" | "NO_SHOW"
+  status: "COMPLETED" | "NO_SHOW",
 ): Promise<void> {
   const supabase = await requireAdminClient();
 
   if (!supabase) {
     redirect(
       `/dashboard/bookings?error=${encodeURIComponent(
-        "Only admins can perform this action."
-      )}`
+        "Only admins can perform this action.",
+      )}`,
     );
   }
 
@@ -51,9 +50,7 @@ export async function markBooking(
     .eq("id", bookingId);
 
   if (error) {
-    redirect(
-      `/dashboard/bookings?error=${encodeURIComponent(error.message)}`
-    );
+    redirect(`/dashboard/bookings?error=${encodeURIComponent(error.message)}`);
   }
 
   revalidatePath("/dashboard/bookings");

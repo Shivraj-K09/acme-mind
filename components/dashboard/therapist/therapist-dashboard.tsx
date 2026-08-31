@@ -4,25 +4,8 @@ import { AddAvailabilityForm } from "@/components/dashboard/therapist/add-availa
 import { BookingActions } from "@/components/dashboard/booking-actions";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import type { SlotStatus, SlotRow, BookingStatus, BookingRow } from "@/types";
-
-const SLOT_BADGES: Record<SlotStatus, string> = {
-  AVAILABLE:
-    "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
-  BOOKED: "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300",
-};
-
-const BOOKING_BADGES: Record<BookingStatus, string> = {
-  PENDING: "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300",
-  CONFIRMED:
-    "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
-  RESCHEDULED:
-    "bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300",
-  CANCELLED: "bg-muted text-muted-foreground",
-  COMPLETED:
-    "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
-  NO_SHOW: "bg-destructive/10 text-destructive",
-};
+import type { SlotRow, BookingRow } from "@/types";
+import { SLOT_BADGES, BOOKING_BADGES } from "@/constants";
 
 export async function TherapistDashboard({ name }: { name: string }) {
   const supabase = await createClient();

@@ -1,8 +1,7 @@
 "use server";
 
-import { z } from "zod";
-
 import { createClient } from "@/lib/supabase/server";
+import { z } from "zod";
 
 const availabilitySlotSchema = z.object({
   date: z.string().min(1, "Date is required."),
@@ -22,7 +21,9 @@ export async function addAvailabilitySlot(input: {
   const parsed = availabilitySlotSchema.safeParse(input);
 
   if (!parsed.success) {
-    const first = Object.values(z.flattenError(parsed.error).fieldErrors)[0]?.[0];
+    const first = Object.values(
+      z.flattenError(parsed.error).fieldErrors,
+    )[0]?.[0];
     return { error: first ?? "Please fill in all fields." };
   }
 

@@ -3,14 +3,8 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CreditCard, ArrowRight } from "lucide-react";
-import type { PaymentStatus, PaymentRow } from "@/types";
-
-const PAYMENT_BADGES: Record<PaymentStatus, string> = {
-  PENDING: "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300",
-  PAID: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
-  REFUNDED: "bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300",
-  FAILED: "bg-destructive/10 text-destructive",
-};
+import type { PaymentRow } from "@/types";
+import { PAYMENT_BADGES } from "@/constants";
 
 function getPersonName(
   profile?: { full_name?: string | null; email?: string | null } | null,

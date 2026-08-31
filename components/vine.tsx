@@ -1,9 +1,5 @@
 import type { BezierPoint, LeafSpec } from "@/types";
-
-const P0 = { x: 24, y: 232 };
-const P1 = { x: 84, y: 196 };
-const P2 = { x: 56, y: 96 };
-const P3 = { x: 134, y: 16 };
+import { P0, P1, P2, P3, MAIN_LEAVES, BACK_LEAVES } from "@/constants";
 
 function bezierPoint(
   t: number,
@@ -49,22 +45,6 @@ function veinPath(len: number): string {
   const w = len * 0.36;
   return `M ${len * 0.06} ${w * 0.04} Q ${len * 0.45} ${-w * 0.3} ${len * 0.94} ${w * 0.06}`;
 }
-
-const MAIN_LEAVES: LeafSpec[] = [
-  { t: 0.1, side: 1, len: 30, angle: 58 },
-  { t: 0.22, side: -1, len: 23, angle: 50 },
-  { t: 0.36, side: 1, len: 34, angle: 66 },
-  { t: 0.5, side: -1, len: 27, angle: 54 },
-  { t: 0.64, side: 1, len: 31, angle: 62 },
-  { t: 0.78, side: -1, len: 19, angle: 48 },
-  { t: 0.9, side: 1, len: 24, angle: 58 },
-];
-
-const BACK_LEAVES: LeafSpec[] = [
-  { t: 0.14, side: -1, len: 48, angle: 72 },
-  { t: 0.44, side: 1, len: 56, angle: 76 },
-  { t: 0.72, side: -1, len: 46, angle: 70 },
-];
 
 function Vine({ className }: { className?: string }) {
   const branchStart = bezierPoint(0.38, P0, P1, P2, P3);

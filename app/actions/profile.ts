@@ -1,9 +1,8 @@
 "use server";
 
-import { z } from "zod";
-
 import { createClient } from "@/lib/supabase/server";
 import { updateProfileSchema } from "@/lib/validations/profile";
+import { z } from "zod";
 
 /**
  * Updates the signed-in user's profile. For therapists it also keeps their
@@ -17,7 +16,7 @@ export async function updateProfile(input: unknown): Promise<{
 
   if (!parsed.success) {
     const first = Object.values(
-      z.flattenError(parsed.error).fieldErrors
+      z.flattenError(parsed.error).fieldErrors,
     )[0]?.[0];
     return { error: first ?? "Please check the fields and try again." };
   }

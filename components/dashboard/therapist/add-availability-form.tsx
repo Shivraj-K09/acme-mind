@@ -21,14 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { toast } from "@/components/ui/toast";
-
-const TIME_OPTIONS = Array.from({ length: 25 }, (_, index) => {
-  const minutes = 8 * 60 + index * 30;
-  const hour = Math.floor(minutes / 60);
-  const minute = minutes % 60;
-
-  return `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
-});
+import { TIME_OPTIONS } from "@/constants";
 
 function formatTimeLabel(time: string) {
   return new Date(`2000-01-01T${time}`).toLocaleTimeString("en-US", {
@@ -139,7 +132,7 @@ export function AddAvailabilityForm() {
               <span>Start time...</span>
             )}
           </SelectTrigger>
-          <SelectContent className="min-w-0 max-h-72 w-(--anchor-width) [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <SelectContent className="min-w-0 max-h-72 w-(--anchor-width) scrollbar-none [&::-webkit-scrollbar]:hidden">
             {TIME_OPTIONS.map((time) => (
               <SelectItem key={time} value={time}>
                 {formatTimeLabel(time)}
@@ -155,7 +148,7 @@ export function AddAvailabilityForm() {
           <SelectTrigger className="h-9! flex-1 rounded-xl bg-muted/50 py-0 text-muted-foreground sm:w-auto sm:flex-none">
             {endTime ? formatTimeLabel(endTime) : <span>End time...</span>}
           </SelectTrigger>
-          <SelectContent className="min-w-0 max-h-72 w-(--anchor-width) [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <SelectContent className="min-w-0 max-h-72 w-(--anchor-width) scrollbar-none [&::-webkit-scrollbar]:hidden">
             {TIME_OPTIONS.map((time) => (
               <SelectItem key={time} value={time}>
                 {formatTimeLabel(time)}

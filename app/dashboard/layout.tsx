@@ -4,37 +4,10 @@ import { Sparkles } from "lucide-react";
 import { getProfile } from "@/lib/supabase/profile";
 import { Shell } from "@/components/dashboard/shell";
 import { SignOutButton } from "@/components/sign-out-button";
-import type { NavItem } from "@/types";
+import { NAV_BY_ROLE } from "@/constants";
 
 export const metadata: Metadata = {
   title: "Dashboard",
-};
-
-const NAV_BY_ROLE: Record<
-  "COORDINATOR" | "THERAPIST" | "ADMIN",
-  NavItem[]
-> = {
-  COORDINATOR: [
-    { href: "/dashboard", label: "Dashboard" },
-    { href: "/dashboard/clients", label: "Clients" },
-    { href: "/dashboard/therapists", label: "Therapists" },
-    { href: "/dashboard/recommendations", label: "Recommendations" },
-    { href: "/dashboard/bookings", label: "Bookings" },
-  ],
-  THERAPIST: [
-    { href: "/dashboard", label: "Dashboard" },
-    { href: "/dashboard/bookings", label: "Bookings" },
-    { href: "/dashboard/profile", label: "Profile" },
-  ],
-  ADMIN: [
-    { href: "/dashboard", label: "Dashboard" },
-    { href: "/dashboard/clients", label: "Clients" },
-    { href: "/dashboard/therapists", label: "Therapists" },
-    { href: "/dashboard/coordinators", label: "Coordinators" },
-    { href: "/dashboard/recommendations", label: "Recommendations" },
-    { href: "/dashboard/bookings", label: "Bookings" },
-    { href: "/dashboard/payments", label: "Payments" },
-  ],
 };
 
 export default async function DashboardLayout({

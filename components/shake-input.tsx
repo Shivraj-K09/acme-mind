@@ -6,9 +6,7 @@ import * as React from "react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import type { ShakeInputHandle, ShakeInputProps } from "@/types";
-
-const SHAKE_MS = 280;
-const HOLD_MS = 3000;
+import { SHAKE_MS, HOLD_MS } from "@/constants";
 
 export type { ShakeInputHandle, ShakeInputProps };
 

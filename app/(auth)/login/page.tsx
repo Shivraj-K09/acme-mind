@@ -3,17 +3,10 @@ import Link from "next/link"
 
 import { LoginForm } from "@/components/login-form"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { LOGIN_ERRORS } from "@/constants"
 
 export const metadata: Metadata = {
   title: "Sign in",
-}
-
-const LOGIN_ERRORS: Record<string, { title: string; description: string }> = {
-  invalid_link: {
-    title: "This link is invalid or has expired",
-    description:
-      "Invite and password links only work once. Please ask for a new link or create the client again.",
-  },
 }
 
 export default async function LoginPage({
