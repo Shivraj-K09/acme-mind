@@ -1,12 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-
-type CoordinatorRow = {
-  id: string;
-  email: string;
-  full_name: string;
-  phone: string | null;
-};
+import type { CoordinatorRow } from "@/types";
 
 export default async function CoordinatorsPage() {
   const supabase = await createClient();

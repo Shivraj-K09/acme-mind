@@ -5,16 +5,7 @@ import { CreateClientDialog } from "@/components/dashboard/coordinator/create-cl
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-
-type ClientRow = {
-  id: string;
-  profile_id: string;
-  created_at: string;
-  profiles: {
-    full_name: string;
-    email: string;
-  };
-};
+import type { ClientRow } from "@/types";
 
 export default async function ClientsPage({
   searchParams,

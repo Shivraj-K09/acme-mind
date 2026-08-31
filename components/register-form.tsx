@@ -4,11 +4,8 @@ import { useRouter } from "next/navigation";
 import * as React from "react";
 import { z } from "zod";
 
-import {
-  ShakeInput,
-  triggerFieldErrors,
-  type ShakeInputHandle,
-} from "@/components/shake-input";
+import { ShakeInput, triggerFieldErrors } from "@/components/shake-input";
+import type { ShakeInputHandle } from "@/types";
 import { Button } from "@/components/ui/button";
 import {
   Field,

@@ -9,14 +9,7 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/toast";
-
-type ProfileFormDefaults = {
-  fullName: string;
-  phone: string;
-  bio: string;
-  specialization: string;
-  experienceYears: number;
-};
+import type { ProfileFormDefaults } from "@/types";
 
 export function ProfileForm({ defaults }: { defaults: ProfileFormDefaults }) {
   const router = useRouter();

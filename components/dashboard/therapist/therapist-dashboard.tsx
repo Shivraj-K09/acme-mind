@@ -1,37 +1,10 @@
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { AddAvailabilityForm } from "@/components/dashboard/therapist/add-availability-form";
 import { BookingActions } from "@/components/dashboard/booking-actions";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-
-type SlotStatus = "AVAILABLE" | "BOOKED";
-
-type SlotRow = {
-  id: string;
-  start_time: string;
-  end_time: string;
-  status: SlotStatus;
-};
-
-type BookingStatus =
-  | "PENDING"
-  | "CONFIRMED"
-  | "RESCHEDULED"
-  | "CANCELLED"
-  | "COMPLETED"
-  | "NO_SHOW";
-
-type BookingRow = {
-  id: string;
-  therapist_id: string;
-  status: BookingStatus;
-  scheduled_start: string;
-  clients: {
-    profiles: {
-      full_name: string | null;
-    } | null;
-  } | null;
-};
+import type { SlotStatus, SlotRow, BookingStatus, BookingRow } from "@/types";
 
 const SLOT_BADGES: Record<SlotStatus, string> = {
   AVAILABLE:
@@ -59,6 +32,7 @@ export async function TherapistDashboard({ name }: { name: string }) {
   let slots: SlotRow[] = [];
   let bookings: BookingRow[] = [];
   let therapistId: string | null = null;
+  const profilesMap = new Map<string, { full_name: string | null; email: string | null }>();
 
   if (userData.user) {
     const { data: therapist } = await supabase
@@ -80,12 +54,55 @@ export async function TherapistDashboard({ name }: { name: string }) {
 
       const { data: bookingData } = await supabase
         .from("bookings")
-        .select("id, therapist_id, status, scheduled_start, clients(profiles(full_name))")
+        .select("id, client_id, therapist_id, status, scheduled_start, clients(id, profile_id, profiles(full_name, email))")
         .eq("therapist_id", therapist.id)
         .order("scheduled_start", { ascending: false })
         .limit(10);
 
-      bookings = (bookingData ?? []) as unknown as BookingRow[];
+      const rawBookings = (bookingData ?? []) as unknown as BookingRow[];
+      const clientIds = Array.from(
+        new Set(rawBookings.map((b) => b.client_id).filter((id): id is string => Boolean(id)))
+      );
+
+      const admin = createAdminClient();
+      const clientToUse = admin ?? supabase;
+
+      if (clientIds.length > 0) {
+        const { data: clientRows } = await clientToUse
+          .from("clients")
+          .select("id, profile_id, profiles(full_name, email)")
+          .in("id", clientIds);
+
+        clientRows?.forEach((c: { id: string; profile_id?: string; profiles?: { full_name: string | null; email: string | null } | { full_name: string | null; email: string | null }[] | null }) => {
+          const prof = Array.isArray(c.profiles) ? c.profiles[0] : c.profiles;
+          if (prof) {
+            profilesMap.set(c.id, prof);
+            if (c.profile_id) profilesMap.set(c.profile_id, prof);
+          }
+        });
+      }
+
+      bookings = rawBookings.map((booking) => {
+        const clientProfile =
+          booking.clients?.profiles ||
+          (booking.client_id ? profilesMap.get(booking.client_id) : null) ||
+          (booking.clients?.profile_id
+            ? profilesMap.get(booking.clients.profile_id)
+            : null);
+
+        const clientName =
+          clientProfile?.full_name?.trim() ||
+          (clientProfile?.email
+            ? clientProfile.email.split("@")[0].charAt(0).toUpperCase() +
+              clientProfile.email.split("@")[0].slice(1)
+            : null) ||
+          "Client";
+
+        return {
+          ...booking,
+          clientName,
+        };
+      });
     }
   }
 
@@ -152,7 +169,7 @@ export async function TherapistDashboard({ name }: { name: string }) {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Your bookings</CardTitle>
+          <CardTitle>Bookings</CardTitle>
           <CardDescription>
             Sessions clients have booked with you.
           </CardDescription>
@@ -166,18 +183,18 @@ export async function TherapistDashboard({ name }: { name: string }) {
               >
                 <div>
                   <p className="text-sm font-medium">
-                    {booking.clients?.profiles?.full_name ?? "Client"}
+                    {booking.clientName}
                   </p>
-                  <p className="text-sm text-muted-foreground">
-                    {new Date(booking.scheduled_start).toLocaleString("en-US", {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                      hour: "numeric",
-                      minute: "2-digit",
-                    })}
-                  </p>
-                </div>
+                    <p className="text-sm text-muted-foreground">
+                      {new Date(booking.scheduled_start).toLocaleString("en-US", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                        hour: "numeric",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                  </div>
                 <div className="flex flex-col items-end gap-2">
                   <Badge
                     className={`shrink-0 ${BOOKING_BADGES[booking.status]}`}

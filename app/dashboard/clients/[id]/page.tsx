@@ -12,39 +12,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-
-type RecommendationStatus = "PENDING" | "ACCEPTED" | "REJECTED";
-
-type ClientRow = {
-  id: string;
-  created_at: string;
-  profiles: {
-    full_name: string;
-    email: string;
-    phone: string | null;
-  } | null;
-};
-
-type RecommendationRow = {
-  id: string;
-  therapist_id: string;
-  status: RecommendationStatus;
-  therapists: {
-    specialization: string;
-    experience_years: number;
-    profiles: {
-      full_name: string;
-    } | null;
-  };
-};
-
-type TherapistRow = {
-  id: string;
-  specialization: string;
-  profiles: {
-    full_name: string;
-  } | null;
-};
+import { ChevronLeft } from "lucide-react";
+import type { ClientRow, RecommendationRow, TherapistRow } from "@/types";
 
 export default async function ClientDetailPage({
   params,
@@ -106,8 +75,10 @@ export default async function ClientDetailPage({
           size="sm"
           nativeButton={false}
           render={<Link href="/dashboard/clients" />}
+          className="gap-1 text-muted-foreground hover:text-foreground"
         >
-          {"<-"} Back to clients
+          <ChevronLeft className="size-4 shrink-0" />
+          <span>Back to clients</span>
         </Button>
       </div>
 
@@ -168,12 +139,12 @@ export default async function ClientDetailPage({
               >
                 <div>
                   <p className="text-sm font-medium">
-                    {recommendation.therapists.profiles?.full_name ??
+                    {recommendation.therapists?.profiles?.full_name ??
                       "Unknown therapist"}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    {recommendation.therapists.specialization} -{" "}
-                    {recommendation.therapists.experience_years} yrs experience
+                    {recommendation.therapists?.specialization ?? "General therapy"} -{" "}
+                    {recommendation.therapists?.experience_years ?? 0} yrs experience
                   </p>
                 </div>
                 <span className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground">

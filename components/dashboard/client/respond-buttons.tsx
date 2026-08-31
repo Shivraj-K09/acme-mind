@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
+import { Check, X } from "lucide-react";
 
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -50,21 +51,23 @@ export function RespondButtons({
   }
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2.5 w-full">
       <Button
-        className="flex-1 rounded-lg"
+        className="flex-1 rounded-xl h-10 font-medium"
         disabled={pending !== null}
         onClick={() => respond("ACCEPTED")}
       >
-        Accept
+        <Check className="size-4 mr-1.5" />
+        {pending === "ACCEPTED" ? "Accepting..." : "Accept"}
       </Button>
       <Button
         variant="outline"
-        className="flex-1 rounded-lg"
+        className="flex-1 rounded-xl h-10 font-medium hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30"
         disabled={pending !== null}
         onClick={() => respond("REJECTED")}
       >
-        Reject
+        <X className="size-4 mr-1.5" />
+        {pending === "REJECTED" ? "Declining..." : "Decline"}
       </Button>
     </div>
   );

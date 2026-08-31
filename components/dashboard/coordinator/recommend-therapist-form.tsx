@@ -12,11 +12,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
-
-type TherapistOption = {
-  id: string;
-  label: string;
-};
+import type { TherapistOption } from "@/types";
 
 export function RecommendTherapistForm({
   clientId,
@@ -79,10 +75,9 @@ export function RecommendTherapistForm({
         value={therapistId}
         onValueChange={(value) => setTherapistId((value as string) ?? "")}
       >
-        <SelectTrigger className="h-11 flex-1 rounded-xl bg-muted/50 px-3 py-0">
+        <SelectTrigger className="h-11! flex-1 rounded-xl bg-muted/50 px-3 py-0">
           {therapistId ? (
-            therapists.find((therapist) => therapist.id === therapistId)
-              ?.label
+            therapists.find((therapist) => therapist.id === therapistId)?.label
           ) : (
             <span className="text-muted-foreground">Choose a therapist...</span>
           )}

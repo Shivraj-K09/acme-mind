@@ -5,23 +5,12 @@ import * as React from "react";
 
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import type { ShakeInputHandle, ShakeInputProps } from "@/types";
 
 const SHAKE_MS = 280;
 const HOLD_MS = 3000;
 
-export type ShakeInputHandle = {
-  trigger: (message: string) => void;
-  cancel: () => void;
-};
-
-type ShakeInputProps = Omit<
-  React.ComponentProps<"input">,
-  "ref" | "onInput"
-> & {
-  ref?: React.Ref<ShakeInputHandle>;
-  reveal?: boolean;
-  onInput?: React.InputEventHandler<HTMLInputElement>;
-};
+export type { ShakeInputHandle, ShakeInputProps };
 
 function ShakeInput({
   ref,

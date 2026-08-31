@@ -1,65 +1,66 @@
 import { createClient } from "@/lib/supabase/server";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-
-type TherapistRow = {
-  id: string;
-  specialization: string;
-  experience_years: number;
-  profiles: {
-    full_name: string;
-    email: string;
-  } | null;
-};
+import { TherapistCard } from "@/components/dashboard/therapist/therapist-card";
+import { Stethoscope } from "lucide-react";
+import type { TherapistRow } from "@/types";
 
 export default async function TherapistsPage() {
   const supabase = await createClient();
 
   const { data } = await supabase
     .from("therapists")
-    .select("id, specialization, experience_years, profiles!inner(full_name, email)")
+    .select(
+      "id, bio, specialization, experience_years, profiles!inner(full_name, email, phone)"
+    )
     .order("created_at", { ascending: true });
 
   const therapists = (data ?? []) as unknown as TherapistRow[];
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Therapists</CardTitle>
-        <CardDescription>
-          The therapist network available for matching with clients.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-2">
-        {therapists.length > 0 ? (
-          therapists.map((therapist) => (
-            <div
-              key={therapist.id}
-              className="flex items-center justify-between rounded-xl border px-4 py-3"
-            >
-              <div>
-                <p className="text-sm font-medium">
-                  {therapist.profiles?.full_name ?? "Unnamed therapist"}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {therapist.profiles?.email ?? "-"}
-                </p>
-              </div>
-              <div className="text-right">
-                <p className="text-sm font-medium">
-                  {therapist.specialization || "General therapy"}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {therapist.experience_years} yrs experience
-                </p>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p className="py-6 text-center text-sm text-muted-foreground">
-            No therapists yet. Promote a user to THERAPIST to add them here.
+    <div className="flex flex-col gap-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
+              Therapist Directory
+            </h1>
+            <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
+              {therapists.length} {therapists.length === 1 ? "Specialist" : "Specialists"}
+            </span>
+          </div>
+          <p className="mt-1 text-sm text-muted-foreground">
+            The licensed therapist network available for client matching and mental health care.
           </p>
-        )}
-      </CardContent>
-    </Card>
+        </div>
+      </div>
+
+      {/* Doctor Card Grid */}
+      {therapists.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+          {therapists.map((therapist) => (
+            <TherapistCard
+              key={therapist.id}
+              id={therapist.id}
+              name={therapist.profiles?.full_name ?? "Licensed Therapist"}
+              specialization={therapist.specialization}
+              experienceYears={therapist.experience_years}
+              bio={therapist.bio}
+              email={therapist.profiles?.email}
+              phone={therapist.profiles?.phone}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed p-12 text-center bg-card/50">
+          <div className="flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary mb-3">
+            <Stethoscope className="size-6" />
+          </div>
+          <h3 className="text-base font-semibold text-foreground">No therapists registered yet</h3>
+          <p className="mt-1 max-w-sm text-sm text-muted-foreground">
+            Promote a user to THERAPIST role to add them to the specialist network directory.
+          </p>
+        </div>
+      )}
+    </div>
   );
 }

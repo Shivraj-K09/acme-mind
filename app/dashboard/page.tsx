@@ -3,13 +3,10 @@ import { AdminDashboard } from "@/components/dashboard/admin/admin-dashboard";
 import { ClientDashboard } from "@/components/dashboard/client/client-dashboard";
 import { CoordinatorDashboard } from "@/components/dashboard/coordinator/coordinator-dashboard";
 import { TherapistDashboard } from "@/components/dashboard/therapist/therapist-dashboard";
-
-type DashboardComponent = (props: {
-  name: string;
-}) => Promise<React.ReactNode> | React.ReactNode;
+import type { DashboardComponent, UserRole } from "@/types";
 
 const ROLE_DASHBOARDS: Record<
-  "CLIENT" | "THERAPIST" | "COORDINATOR" | "ADMIN",
+  UserRole,
   DashboardComponent
 > = {
   CLIENT: ClientDashboard,
@@ -19,11 +16,16 @@ const ROLE_DASHBOARDS: Record<
 };
 
 export default async function DashboardPage() {
-  const { profile } = await getProfile();
+  const { user, profile } = await getProfile();
+
+  const displayName =
+    profile.full_name?.trim() ||
+    (user?.email ? user.email.split("@")[0] : "") ||
+    "Member";
 
   const Dashboard =
     ROLE_DASHBOARDS[profile.role as keyof typeof ROLE_DASHBOARDS] ??
     ClientDashboard;
 
-  return <Dashboard name={profile.full_name} />;
+  return <Dashboard name={displayName} />;
 }

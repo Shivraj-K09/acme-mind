@@ -16,11 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/toast";
-
-type SlotOption = {
-  id: string;
-  label: string;
-};
+import type { SlotOption } from "@/types";
 
 function formatSlot(start: string, end: string) {
   return `${new Date(start).toLocaleString("en-US", {

@@ -1,8 +1,4 @@
-type Point = {
-  x: number;
-  y: number;
-  angle: number;
-};
+import type { BezierPoint, LeafSpec } from "@/types";
 
 const P0 = { x: 24, y: 232 };
 const P1 = { x: 84, y: 196 };
@@ -15,7 +11,7 @@ function bezierPoint(
   b: { x: number; y: number },
   c: { x: number; y: number },
   d: { x: number; y: number },
-): Point {
+): BezierPoint {
   const mt = 1 - t;
   const x =
     mt * mt * mt * a.x +
@@ -54,13 +50,6 @@ function veinPath(len: number): string {
   return `M ${len * 0.06} ${w * 0.04} Q ${len * 0.45} ${-w * 0.3} ${len * 0.94} ${w * 0.06}`;
 }
 
-type LeafSpec = {
-  t: number;
-  side: 1 | -1;
-  len: number;
-  angle: number;
-};
-
 const MAIN_LEAVES: LeafSpec[] = [
   { t: 0.1, side: 1, len: 30, angle: 58 },
   { t: 0.22, side: -1, len: 23, angle: 50 },
@@ -91,6 +80,45 @@ function Vine({ className }: { className?: string }) {
     { t: 0.92, side: 1, len: 17, angle: 60 },
   ];
 
+  const computedBackLeaves = BACK_LEAVES.map((leaf) => {
+    const point = bezierPoint(leaf.t, P0, P1, P2, P3);
+    const rotation = point.angle + leaf.side * leaf.angle;
+    return {
+      d: leafPath(leaf.len),
+      transform: `translate(${point.x} ${point.y}) rotate(${rotation})`,
+    };
+  });
+
+  const computedMainLeaves = MAIN_LEAVES.map((leaf, index) => {
+    const point = bezierPoint(leaf.t, P0, P1, P2, P3);
+    const rotation =
+      point.angle + leaf.side * (leaf.angle + (index % 3) * 4);
+    const gradient =
+      index % 2 === 0 ? "url(#vine-leaf-dark)" : "url(#vine-leaf-light)";
+    return {
+      leafD: leafPath(leaf.len),
+      veinD: veinPath(leaf.len),
+      gradient,
+      transform: `translate(${point.x} ${point.y}) rotate(${rotation})`,
+    };
+  });
+
+  const computedBranchLeaves = branchLeaves.map((leaf) => {
+    const point = bezierPoint(
+      leaf.t,
+      branch.a,
+      branch.b,
+      branch.c,
+      branch.d,
+    );
+    const rotation = point.angle + leaf.side * leaf.angle;
+    return {
+      leafD: leafPath(leaf.len),
+      veinD: veinPath(leaf.len),
+      transform: `translate(${point.x} ${point.y}) rotate(${rotation})`,
+    };
+  });
+
   return (
     <svg
       viewBox="0 0 180 240"
@@ -109,19 +137,15 @@ function Vine({ className }: { className?: string }) {
         </linearGradient>
       </defs>
 
-      {BACK_LEAVES.map((leaf, index) => {
-        const point = bezierPoint(leaf.t, P0, P1, P2, P3);
-        const rotation = point.angle + leaf.side * leaf.angle;
-        return (
-          <path
-            key={`back-${index}`}
-            d={leafPath(leaf.len)}
-            fill="currentColor"
-            fillOpacity={0.3}
-            transform={`translate(${point.x} ${point.y}) rotate(${rotation})`}
-          />
-        );
-      })}
+      {computedBackLeaves.map((leaf, index) => (
+        <path
+          key={`back-${index}`}
+          d={leaf.d}
+          fill="currentColor"
+          fillOpacity={0.3}
+          transform={leaf.transform}
+        />
+      ))}
 
       <path
         d={`M ${P0.x} ${P0.y} C ${P1.x} ${P1.y}, ${P2.x} ${P2.y}, ${P3.x} ${P3.y}`}
@@ -136,68 +160,51 @@ function Vine({ className }: { className?: string }) {
         strokeLinecap="round"
       />
 
-      {MAIN_LEAVES.map((leaf, index) => {
-        const point = bezierPoint(leaf.t, P0, P1, P2, P3);
-        const rotation =
-          point.angle + leaf.side * (leaf.angle + (index % 3) * 4);
-        const gradient =
-          index % 2 === 0 ? "url(#vine-leaf-dark)" : "url(#vine-leaf-light)";
-        return (
-          <g
-            key={`main-${index}`}
-            transform={`translate(${point.x} ${point.y}) rotate(${rotation})`}
-          >
-            <path
-              d={leafPath(leaf.len)}
-              fill={gradient}
-              stroke="currentColor"
-              strokeOpacity={0.45}
-              strokeWidth={1}
-              strokeLinejoin="round"
-            />
-            <path
-              d={veinPath(leaf.len)}
-              stroke="currentColor"
-              strokeOpacity={0.5}
-              strokeWidth={0.9}
-              strokeLinecap="round"
-            />
-          </g>
-        );
-      })}
+      {computedMainLeaves.map((leaf, index) => (
+        <g
+          key={`main-${index}`}
+          transform={leaf.transform}
+        >
+          <path
+            d={leaf.leafD}
+            fill={leaf.gradient}
+            stroke="currentColor"
+            strokeOpacity={0.45}
+            strokeWidth={1}
+            strokeLinejoin="round"
+          />
+          <path
+            d={leaf.veinD}
+            stroke="currentColor"
+            strokeOpacity={0.5}
+            strokeWidth={0.9}
+            strokeLinecap="round"
+          />
+        </g>
+      ))}
 
-      {branchLeaves.map((leaf, index) => {
-        const point = bezierPoint(
-          leaf.t,
-          branch.a,
-          branch.b,
-          branch.c,
-          branch.d,
-        );
-        const rotation = point.angle + leaf.side * leaf.angle;
-        return (
-          <g
-            key={`branch-${index}`}
-            transform={`translate(${point.x} ${point.y}) rotate(${rotation})`}
-          >
-            <path
-              d={leafPath(leaf.len)}
-              fill="url(#vine-leaf-dark)"
-              stroke="currentColor"
-              strokeOpacity={0.45}
-              strokeWidth={0.9}
-              strokeLinejoin="round"
-            />
-            <path
-              d={veinPath(leaf.len)}
-              stroke="currentColor"
-              strokeOpacity={0.5}
-              strokeWidth={0.8}
-              strokeLinecap="round"
-            />
-          </g>
-        );
-      })}
+      {computedBranchLeaves.map((leaf, index) => (
+        <g
+          key={`branch-${index}`}
+          transform={leaf.transform}
+        >
+          <path
+            d={leaf.leafD}
+            fill="url(#vine-leaf-dark)"
+            stroke="currentColor"
+            strokeOpacity={0.45}
+            strokeWidth={0.9}
+            strokeLinejoin="round"
+          />
+          <path
+            d={leaf.veinD}
+            stroke="currentColor"
+            strokeOpacity={0.5}
+            strokeWidth={0.8}
+            strokeLinecap="round"
+          />
+        </g>
+      ))}
 
       <circle cx={P3.x} cy={P3.y} r={3.2} fill="currentColor" />
       <circle

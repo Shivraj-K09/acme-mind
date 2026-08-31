@@ -6,7 +6,8 @@ import { z } from "zod";
 
 import { createClient } from "@/lib/supabase/client";
 import { setPasswordSchema } from "@/lib/validations/auth";
-import { ShakeInput, triggerFieldErrors, type ShakeInputHandle } from "@/components/shake-input";
+import { ShakeInput, triggerFieldErrors } from "@/components/shake-input";
+import type { ShakeInputHandle } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { toast } from "@/components/ui/toast";
