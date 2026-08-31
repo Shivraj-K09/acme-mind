@@ -349,7 +349,14 @@ export async function ClientDashboard({ name }: { name: string }) {
               </p>
             </div>
           </div>
-          <Button size="lg" className="shrink-0 rounded-xl h-11 px-6 font-medium shadow-xs">
+          <Button
+            size="lg"
+            nativeButton={false}
+            render={
+              <a href="mailto:coordinator@thoughtpudding.com?subject=Care%20Coordinator%20Matching%20Assistance" />
+            }
+            className="shrink-0 rounded-xl h-11 px-6 font-medium shadow-xs"
+          >
             <LifeBuoy className="size-4 mr-2" /> Contact Coordinator
           </Button>
         </CardContent>
