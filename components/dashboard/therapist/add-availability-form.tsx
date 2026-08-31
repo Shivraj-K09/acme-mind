@@ -21,7 +21,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { toast } from "@/components/ui/toast";
-import { TIME_OPTIONS } from "@/constants";
+
+const TIME_OPTIONS = Array.from({ length: 25 }, (_, index) => {
+  const minutes = 8 * 60 + index * 30;
+  const hour = Math.floor(minutes / 60);
+  const minute = minutes % 60;
+
+  return `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
+});
 
 function formatTimeLabel(time: string) {
   return new Date(`2000-01-01T${time}`).toLocaleTimeString("en-US", {
@@ -30,14 +37,57 @@ function formatTimeLabel(time: string) {
   });
 }
 
+function isSameDay(a: Date, b: Date) {
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  );
+}
+
 export function AddAvailabilityForm() {
   const router = useRouter();
-  const now = new Date();
   const [date, setDate] = React.useState<Date | undefined>();
+  const [pickedNow, setPickedNow] = React.useState<number | null>(null);
   const [startTime, setStartTime] = React.useState("");
   const [endTime, setEndTime] = React.useState("");
   const [calendarOpen, setCalendarOpen] = React.useState(false);
   const [pending, setPending] = React.useState(false);
+
+  const isToday =
+    date && pickedNow !== null ? isSameDay(date, new Date(pickedNow)) : false;
+
+  const startOptions = TIME_OPTIONS.filter((time) => {
+    if (!isToday || !date || pickedNow === null) return true;
+
+    const [hours, minutes] = time.split(":").map(Number);
+    const option = new Date(date);
+    option.setHours(hours, minutes, 0, 0);
+
+    return option.getTime() > pickedNow;
+  });
+
+  const endOptions = startTime
+    ? TIME_OPTIONS.filter((time) => time > startTime)
+    : [];
+
+  function handleSelect(selected: Date | undefined) {
+    setDate(selected);
+    setPickedNow(Date.now());
+    setStartTime("");
+    setEndTime("");
+    setCalendarOpen(false);
+  }
+
+  function handleStartChange(value: string | null) {
+    const next = value ?? "";
+
+    setStartTime(next);
+
+    if (endTime && next && endTime <= next) {
+      setEndTime("");
+    }
+  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -77,6 +127,7 @@ export function AddAvailabilityForm() {
     });
 
     setDate(undefined);
+    setPickedNow(null);
     setStartTime("");
     setEndTime("");
     router.refresh();
@@ -100,7 +151,7 @@ export function AddAvailabilityForm() {
                 {date ? (
                   format(date, "MMM d, yyyy")
                 ) : (
-                  <span>Pick a date...</span>
+                  <span>Pick a date…</span>
                 )}
               </Button>
             }
@@ -109,13 +160,10 @@ export function AddAvailabilityForm() {
             <Calendar
               mode="single"
               selected={date}
-              onSelect={(selected) => {
-                setDate(selected);
-                setCalendarOpen(false);
-              }}
-              disabled={{ before: now }}
-              startMonth={new Date(now.getFullYear(), now.getMonth(), 1)}
-              endMonth={new Date(now.getFullYear() + 2, 11, 31)}
+              onSelect={handleSelect}
+              disabled={{ before: new Date() }}
+              startMonth={new Date(new Date().getFullYear(), new Date().getMonth(), 1)}
+              endMonth={new Date(new Date().getFullYear() + 2, 11, 31)}
               captionLayout="dropdown"
             />
           </PopoverContent>
@@ -123,17 +171,18 @@ export function AddAvailabilityForm() {
 
         <Select
           value={startTime}
-          onValueChange={(value) => setStartTime((value as string) ?? "")}
+          onValueChange={handleStartChange}
+          disabled={!date}
         >
           <SelectTrigger className="h-9! flex-1 rounded-xl bg-muted/50 py-0 text-muted-foreground sm:w-auto sm:flex-none">
             {startTime ? (
               formatTimeLabel(startTime)
             ) : (
-              <span>Start time...</span>
+              <span>Start time…</span>
             )}
           </SelectTrigger>
-          <SelectContent className="min-w-0 max-h-72 w-(--anchor-width) scrollbar-none [&::-webkit-scrollbar]:hidden">
-            {TIME_OPTIONS.map((time) => (
+          <SelectContent className="min-w-0 max-h-72 w-(--anchor-width) [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {startOptions.map((time) => (
               <SelectItem key={time} value={time}>
                 {formatTimeLabel(time)}
               </SelectItem>
@@ -146,10 +195,10 @@ export function AddAvailabilityForm() {
           onValueChange={(value) => setEndTime((value as string) ?? "")}
         >
           <SelectTrigger className="h-9! flex-1 rounded-xl bg-muted/50 py-0 text-muted-foreground sm:w-auto sm:flex-none">
-            {endTime ? formatTimeLabel(endTime) : <span>End time...</span>}
+            {endTime ? formatTimeLabel(endTime) : <span>End time…</span>}
           </SelectTrigger>
-          <SelectContent className="min-w-0 max-h-72 w-(--anchor-width) scrollbar-none [&::-webkit-scrollbar]:hidden">
-            {TIME_OPTIONS.map((time) => (
+          <SelectContent className="min-w-0 max-h-72 w-(--anchor-width) [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {endOptions.map((time) => (
               <SelectItem key={time} value={time}>
                 {formatTimeLabel(time)}
               </SelectItem>
@@ -161,9 +210,9 @@ export function AddAvailabilityForm() {
           type="submit"
           size="lg"
           className="h-9! rounded-xl"
-          disabled={pending}
+          disabled={pending || !startTime || !endTime}
         >
-          {pending ? "Adding..." : "Add slot"}
+          {pending ? "Adding…" : "Add slot"}
         </Button>
       </div>
     </form>

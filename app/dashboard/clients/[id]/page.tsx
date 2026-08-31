@@ -39,7 +39,7 @@ export default async function ClientDetailPage({
   const { data: recommendationData } = await supabase
     .from("therapist_recommendations")
     .select(
-      "id, therapist_id, status, therapists(specialization, experience_years, profiles(full_name))"
+      "id, therapist_id, status, therapists(specialization, experience_years, profiles(full_name))",
     )
     .eq("client_id", client.id)
     .order("created_at", { ascending: false });
@@ -56,9 +56,8 @@ export default async function ClientDetailPage({
     .filter(
       (therapist) =>
         !recommendations.some(
-          (recommendation) =>
-            recommendation.therapist_id === therapist.id
-        )
+          (recommendation) => recommendation.therapist_id === therapist.id,
+        ),
     )
     .map((therapist) => ({
       id: therapist.id,
@@ -143,8 +142,10 @@ export default async function ClientDetailPage({
                       "Unknown therapist"}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    {recommendation.therapists?.specialization ?? "General therapy"} -{" "}
-                    {recommendation.therapists?.experience_years ?? 0} yrs experience
+                    {recommendation.therapists?.specialization ??
+                      "General therapy"}{" "}
+                    - {recommendation.therapists?.experience_years ?? 0} yrs
+                    experience
                   </p>
                 </div>
                 <span className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground">

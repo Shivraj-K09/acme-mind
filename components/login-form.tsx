@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { z } from "zod";
@@ -16,7 +15,6 @@ import { loginSchema } from "@/lib/validations/auth";
 
 export function LoginForm() {
   const router = useRouter();
-  const supabase = createClient();
   const emailRef = React.useRef<ShakeInputHandle>(null);
   const passwordRef = React.useRef<ShakeInputHandle>(null);
   const [pending, setPending] = React.useState(false);
@@ -110,7 +108,11 @@ export function LoginForm() {
       return;
     }
 
+    const remember = data.get("remember") === "on";
+
     setPending(true);
+
+    const supabase = createClient(remember);
 
     const { error } = await supabase.auth.signInWithPassword({
       email: result.data.email,
@@ -163,14 +165,8 @@ export function LoginForm() {
         </Field>
         <div className="flex items-center justify-between">
           <label className="flex w-fit items-center gap-2 text-sm text-muted-foreground">
-            <Checkbox name="remember" /> Remember me
+            <Checkbox name="remember" defaultChecked /> Remember me
           </label>
-          <Link
-            href="#"
-            className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-          >
-            Forgot password?
-          </Link>
         </div>
         <Button
           type="submit"

@@ -42,6 +42,10 @@ export async function createBooking(
     return { error: "This slot is no longer available." };
   }
 
+  if (new Date(slot.start_time).getTime() <= Date.now()) {
+    return { error: "This session time has already passed." };
+  }
+
   const { error } = await supabase.from("bookings").insert({
     client_id: client.id,
     therapist_id: slot.therapist_id,

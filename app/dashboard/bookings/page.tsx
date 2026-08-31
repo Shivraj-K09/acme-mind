@@ -69,13 +69,22 @@ export default async function BookingsPage({
       .select("id, profile_id, profiles(full_name, email)")
       .in("id", clientIds);
 
-    clientRows?.forEach((c: { id: string; profile_id?: string; profiles?: { full_name: string | null; email: string | null } | { full_name: string | null; email: string | null }[] | null }) => {
-      const prof = Array.isArray(c.profiles) ? c.profiles[0] : c.profiles;
-      if (prof) {
-        profilesMap.set(c.id, prof);
-        if (c.profile_id) profilesMap.set(c.profile_id, prof);
-      }
-    });
+    clientRows?.forEach(
+      (c: {
+        id: string;
+        profile_id?: string;
+        profiles?:
+          | { full_name: string | null; email: string | null }
+          | { full_name: string | null; email: string | null }[]
+          | null;
+      }) => {
+        const prof = Array.isArray(c.profiles) ? c.profiles[0] : c.profiles;
+        if (prof) {
+          profilesMap.set(c.id, prof);
+          if (c.profile_id) profilesMap.set(c.profile_id, prof);
+        }
+      },
+    );
   }
 
   if (therapistIds.length > 0) {
@@ -84,13 +93,22 @@ export default async function BookingsPage({
       .select("id, profile_id, profiles(full_name, email)")
       .in("id", therapistIds);
 
-    therapistRows?.forEach((t: { id: string; profile_id?: string; profiles?: { full_name: string | null; email: string | null } | { full_name: string | null; email: string | null }[] | null }) => {
-      const prof = Array.isArray(t.profiles) ? t.profiles[0] : t.profiles;
-      if (prof) {
-        profilesMap.set(t.id, prof);
-        if (t.profile_id) profilesMap.set(t.profile_id, prof);
-      }
-    });
+    therapistRows?.forEach(
+      (t: {
+        id: string;
+        profile_id?: string;
+        profiles?:
+          | { full_name: string | null; email: string | null }
+          | { full_name: string | null; email: string | null }[]
+          | null;
+      }) => {
+        const prof = Array.isArray(t.profiles) ? t.profiles[0] : t.profiles;
+        if (prof) {
+          profilesMap.set(t.id, prof);
+          if (t.profile_id) profilesMap.set(t.profile_id, prof);
+        }
+      },
+    );
   }
 
   const bookings = rawBookings.map((booking) => {
@@ -179,77 +197,75 @@ export default async function BookingsPage({
                         <span className="rounded-md bg-primary/10 px-2 py-0.5 text-xs text-primary font-medium">
                           Therapist
                         </span>
-                        <span className="truncate">{booking.therapistName}</span>
-                      </div>
-                    </div>
-
-                      <div className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
-                        <Clock className="size-3.5 text-primary shrink-0" />
-                        <span>
-                          {new Date(booking.scheduled_start).toLocaleString(
-                            "en-US",
-                            {
-                              weekday: "short",
-                              day: "numeric",
-                              month: "short",
-                              year: "numeric",
-                              hour: "numeric",
-                              minute: "2-digit",
-                            },
-                          )}
+                        <span className="truncate">
+                          {booking.therapistName}
                         </span>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="flex flex-wrap items-center gap-2 md:self-center">
-                    <Badge
-                      className={`shrink-0 ${STATUS_BADGES[booking.status] ?? ""}`}
-                    >
-                      {booking.status}
-                    </Badge>
-
-                    {isAdmin &&
-                      (booking.status === "CONFIRMED" ||
-                        booking.status === "RESCHEDULED") && (
-                        <div className="flex items-center gap-2">
-                          <form
-                            action={markBooking.bind(
-                              null,
-                              booking.id,
-                              "COMPLETED",
-                            )}
-                          >
-                            <Button
-                              type="submit"
-                              size="sm"
-                              variant="outline"
-                              className="rounded-lg h-8 text-xs font-medium hover:bg-emerald-500/10 hover:text-emerald-700 hover:border-emerald-500/30"
-                            >
-                              Mark Completed
-                            </Button>
-                          </form>
-                          <form
-                            action={markBooking.bind(
-                              null,
-                              booking.id,
-                              "NO_SHOW",
-                            )}
-                          >
-                            <Button
-                              type="submit"
-                              size="sm"
-                              variant="outline"
-                              className="rounded-lg h-8 text-xs font-medium hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30"
-                            >
-                              No-show
-                            </Button>
-                          </form>
-                        </div>
-                      )}
+                    <div className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <Clock className="size-3.5 text-primary shrink-0" />
+                      <span>
+                        {new Date(booking.scheduled_start).toLocaleString(
+                          "en-US",
+                          {
+                            weekday: "short",
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                            hour: "numeric",
+                            minute: "2-digit",
+                          },
+                        )}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              ))
+
+                <div className="flex flex-wrap items-center gap-2 md:self-center">
+                  <Badge
+                    className={`shrink-0 ${STATUS_BADGES[booking.status] ?? ""}`}
+                  >
+                    {booking.status}
+                  </Badge>
+
+                  {isAdmin &&
+                    (booking.status === "CONFIRMED" ||
+                      booking.status === "RESCHEDULED") && (
+                      <div className="flex items-center gap-2">
+                        <form
+                          action={markBooking.bind(
+                            null,
+                            booking.id,
+                            "COMPLETED",
+                          )}
+                        >
+                          <Button
+                            type="submit"
+                            size="sm"
+                            variant="outline"
+                            className="rounded-lg h-8 text-xs font-medium hover:bg-emerald-500/10 hover:text-emerald-700 hover:border-emerald-500/30"
+                          >
+                            Mark Completed
+                          </Button>
+                        </form>
+                        <form
+                          action={markBooking.bind(null, booking.id, "NO_SHOW")}
+                        >
+                          <Button
+                            type="submit"
+                            size="sm"
+                            variant="outline"
+                            className="rounded-lg h-8 text-xs font-medium hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30"
+                          >
+                            No-show
+                          </Button>
+                        </form>
+                      </div>
+                    )}
+                </div>
+              </div>
+            ))
           ) : (
             <div className="py-12 text-center">
               <div className="flex size-12 items-center justify-center rounded-2xl bg-muted text-muted-foreground mx-auto mb-3">
