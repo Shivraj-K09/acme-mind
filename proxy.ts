@@ -34,9 +34,9 @@ export async function proxy(request: NextRequest) {
 
   const { pathname } = request.nextUrl
 
-  if (pathname === "/") {
+  if (pathname === "/" && isAuthenticated) {
     const url = request.nextUrl.clone()
-    url.pathname = isAuthenticated ? "/dashboard" : "/login"
+    url.pathname = "/dashboard"
     return NextResponse.redirect(url)
   }
 

@@ -17,12 +17,12 @@ export default function AuthLayout({
 }) {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
-      <div className="relative hidden h-screen overflow-hidden lg:block">
+      <div className="relative hidden h-screen overflow-hidden bg-muted lg:block">
         <Image
-          src="/acme-miind.png"
+          src="/acme-miind.webp"
           alt="Acme Mind"
-          width={1086}
-          height={1448}
+          width={2172}
+          height={2896}
           priority
           className="h-full w-full object-cover object-center"
         />
