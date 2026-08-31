@@ -42,7 +42,9 @@ next-env.d.ts
 
 docs/
 scripts/
-supabase/
+# Only the CLI folder at repo root (migrations, config). Do not use
+# `supabase/` — that also ignores lib/supabase/, which the app imports.
+/supabase/
 
 .agents/
 skills-lock.json
