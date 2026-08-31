@@ -21,12 +21,16 @@ export function SignOutButton({
         aria-label="Sign out"
         className={cn(
           "cursor-pointer transition-colors",
-          iconOnly && "text-muted-foreground hover:bg-destructive/10 hover:text-destructive",
-          !iconOnly && "text-muted-foreground hover:bg-destructive/10 hover:text-destructive",
-          className
+          iconOnly &&
+            "text-muted-foreground hover:bg-destructive/10 hover:text-destructive",
+          !iconOnly &&
+            "text-muted-foreground hover:bg-destructive/10 hover:text-destructive",
+          className,
         )}
       >
-        <LogOut className={cn("size-4 shrink-0", !iconOnly && showText && "mr-1.5")} />
+        <LogOut
+          className={cn("size-4 shrink-0", !iconOnly && showText && "mr-1.5")}
+        />
         {!iconOnly && showText && <span>Sign out</span>}
       </Button>
     </form>

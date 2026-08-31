@@ -1,14 +1,20 @@
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { CreditCard, ArrowRight } from "lucide-react";
 import type { PaymentRow } from "@/types";
 import { PAYMENT_BADGES } from "@/constants";
 
 function getPersonName(
   profile?: { full_name?: string | null; email?: string | null } | null,
-  fallback = "Member"
+  fallback = "Member",
 ): string {
   if (profile?.full_name && profile.full_name.trim().length > 0) {
     return profile.full_name.trim();
@@ -26,17 +32,25 @@ export default async function PaymentsPage() {
   const { data } = await supabase
     .from("payments")
     .select(
-      "id, amount, currency, status, provider, refunded_at, bookings(client_id, therapist_id, clients(id, profile_id, profiles(full_name, email)), therapists(id, profile_id, profiles(full_name, email)))"
+      "id, amount, currency, status, provider, refunded_at, bookings(client_id, therapist_id, clients(id, profile_id, profiles(full_name, email)), therapists(id, profile_id, profiles(full_name, email)))",
     )
     .order("created_at", { ascending: false });
 
   const rawPayments = (data ?? []) as unknown as PaymentRow[];
 
   const clientIds = Array.from(
-    new Set(rawPayments.map((p) => p.bookings?.client_id).filter((id): id is string => Boolean(id)))
+    new Set(
+      rawPayments
+        .map((p) => p.bookings?.client_id)
+        .filter((id): id is string => Boolean(id)),
+    ),
   );
   const therapistIds = Array.from(
-    new Set(rawPayments.map((p) => p.bookings?.therapist_id).filter((id): id is string => Boolean(id)))
+    new Set(
+      rawPayments
+        .map((p) => p.bookings?.therapist_id)
+        .filter((id): id is string => Boolean(id)),
+    ),
   );
 
   const profilesMap = new Map<
@@ -53,13 +67,22 @@ export default async function PaymentsPage() {
       .select("id, profile_id, profiles(full_name, email)")
       .in("id", clientIds);
 
-    clientRows?.forEach((c: { id: string; profile_id?: string; profiles?: { full_name: string | null; email: string | null } | { full_name: string | null; email: string | null }[] | null }) => {
-      const prof = Array.isArray(c.profiles) ? c.profiles[0] : c.profiles;
-      if (prof) {
-        profilesMap.set(c.id, prof);
-        if (c.profile_id) profilesMap.set(c.profile_id, prof);
-      }
-    });
+    clientRows?.forEach(
+      (c: {
+        id: string;
+        profile_id?: string;
+        profiles?:
+          | { full_name: string | null; email: string | null }
+          | { full_name: string | null; email: string | null }[]
+          | null;
+      }) => {
+        const prof = Array.isArray(c.profiles) ? c.profiles[0] : c.profiles;
+        if (prof) {
+          profilesMap.set(c.id, prof);
+          if (c.profile_id) profilesMap.set(c.profile_id, prof);
+        }
+      },
+    );
   }
 
   if (therapistIds.length > 0) {
@@ -68,13 +91,22 @@ export default async function PaymentsPage() {
       .select("id, profile_id, profiles(full_name, email)")
       .in("id", therapistIds);
 
-    therapistRows?.forEach((t: { id: string; profile_id?: string; profiles?: { full_name: string | null; email: string | null } | { full_name: string | null; email: string | null }[] | null }) => {
-      const prof = Array.isArray(t.profiles) ? t.profiles[0] : t.profiles;
-      if (prof) {
-        profilesMap.set(t.id, prof);
-        if (t.profile_id) profilesMap.set(t.profile_id, prof);
-      }
-    });
+    therapistRows?.forEach(
+      (t: {
+        id: string;
+        profile_id?: string;
+        profiles?:
+          | { full_name: string | null; email: string | null }
+          | { full_name: string | null; email: string | null }[]
+          | null;
+      }) => {
+        const prof = Array.isArray(t.profiles) ? t.profiles[0] : t.profiles;
+        if (prof) {
+          profilesMap.set(t.id, prof);
+          if (t.profile_id) profilesMap.set(t.profile_id, prof);
+        }
+      },
+    );
   }
 
   const payments = rawPayments.map((payment) => {
@@ -122,7 +154,9 @@ export default async function PaymentsPage() {
 
       <Card className="shadow-xs border-border/80">
         <CardHeader className="pb-3">
-          <CardTitle className="text-base font-semibold">Transaction History</CardTitle>
+          <CardTitle className="text-base font-semibold">
+            Transaction History
+          </CardTitle>
           <CardDescription>
             Live view of processed, pending, and refunded session charges.
           </CardDescription>
@@ -176,9 +210,12 @@ export default async function PaymentsPage() {
               <div className="flex size-12 items-center justify-center rounded-2xl bg-muted text-muted-foreground mx-auto mb-3">
                 <CreditCard className="size-6" />
               </div>
-              <h3 className="text-sm font-semibold text-foreground">No payments yet</h3>
+              <h3 className="text-sm font-semibold text-foreground">
+                No payments yet
+              </h3>
               <p className="text-xs text-muted-foreground mt-1">
-                Completed transactions will appear here once clients pay for bookings.
+                Completed transactions will appear here once clients pay for
+                bookings.
               </p>
             </div>
           )}

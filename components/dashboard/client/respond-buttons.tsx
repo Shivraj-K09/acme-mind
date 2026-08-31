@@ -16,7 +16,7 @@ export function RespondButtons({
   const router = useRouter();
   const supabase = createClient();
   const [pending, setPending] = React.useState<"ACCEPTED" | "REJECTED" | null>(
-    null
+    null,
   );
 
   async function respond(status: "ACCEPTED" | "REJECTED") {
@@ -40,7 +40,8 @@ export function RespondButtons({
 
     toast.add({
       type: "success",
-      title: status === "ACCEPTED" ? "Therapist accepted" : "Therapist rejected",
+      title:
+        status === "ACCEPTED" ? "Therapist accepted" : "Therapist rejected",
       description:
         status === "ACCEPTED"
           ? "You can now view their available slots."

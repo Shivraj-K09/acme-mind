@@ -86,7 +86,9 @@ export function ProfileForm({ defaults }: { defaults: ProfileFormDefaults }) {
           />
         </Field>
         <Field>
-          <FieldLabel htmlFor="experience_years">Years of experience</FieldLabel>
+          <FieldLabel htmlFor="experience_years">
+            Years of experience
+          </FieldLabel>
           <Input
             id="experience_years"
             name="experience_years"

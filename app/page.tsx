@@ -83,7 +83,10 @@ export default function LandingPage() {
             Acme Mind
           </Link>
           <nav className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">
-            <Link href="#how" className="transition-colors hover:text-foreground">
+            <Link
+              href="#how"
+              className="transition-colors hover:text-foreground"
+            >
               How it works
             </Link>
             <Link
@@ -92,7 +95,10 @@ export default function LandingPage() {
             >
               Therapists
             </Link>
-            <Link href="#care" className="transition-colors hover:text-foreground">
+            <Link
+              href="#care"
+              className="transition-colors hover:text-foreground"
+            >
               Why Acme Mind
             </Link>
           </nav>
@@ -116,7 +122,7 @@ export default function LandingPage() {
         </div>
       </header>
 
-        <main className="flex-1 pt-16">
+      <main className="flex-1 pt-16">
         <section className="relative overflow-hidden">
           <div
             aria-hidden="true"
@@ -134,8 +140,8 @@ export default function LandingPage() {
               <h1
                 className={`mt-5 text-6xl font-medium leading-[1.02] tracking-tight sm:text-7xl ${SERIF}`}
               >
-                Feel like{" "}
-                <em className="italic text-primary">yourself</em> again.
+                Feel like <em className="italic text-primary">yourself</em>{" "}
+                again.
               </h1>
               <p className="mt-6 max-w-md text-lg leading-relaxed text-muted-foreground">
                 One relaxed conversation with our coordinator and you are
@@ -257,10 +263,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section
-          id="therapists"
-          className="border-y bg-secondary/40"
-        >
+        <section id="therapists" className="border-y bg-secondary/40">
           <div className="mx-auto w-full max-w-6xl px-6 py-28">
             <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
               <h2
@@ -287,11 +290,7 @@ export default function LandingPage() {
                       .map((part) => part[0])
                       .join("")}
                   </div>
-                  <p
-                    className={`text-xl ${SERIF}`}
-                  >
-                    {therapist.name}
-                  </p>
+                  <p className={`text-xl ${SERIF}`}>{therapist.name}</p>
                   <p className="text-sm text-muted-foreground">
                     {therapist.focus} · {therapist.experience}
                   </p>
@@ -339,9 +338,7 @@ export default function LandingPage() {
 
       <footer className="border-t">
         <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-4 px-6 py-8 sm:flex-row">
-          <span
-            className={`inline-flex items-center gap-2 text-lg ${SERIF}`}
-          >
+          <span className={`inline-flex items-center gap-2 text-lg ${SERIF}`}>
             <LeafMark className="size-6 text-primary" />
             Acme Mind
           </span>

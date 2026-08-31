@@ -112,12 +112,19 @@ export function Shell({
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger
                 render={
-                  <Button variant="ghost" size="icon-sm" aria-label="Open menu" />
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    aria-label="Open menu"
+                  />
                 }
               >
                 <Menu className="size-5" />
               </SheetTrigger>
-              <SheetContent side="left" className="w-72 p-4 flex flex-col justify-between">
+              <SheetContent
+                side="left"
+                className="w-72 p-4 flex flex-col justify-between"
+              >
                 <div>
                   <SheetHeader className="p-0 pb-4">
                     <div className="flex items-center gap-3 px-1">

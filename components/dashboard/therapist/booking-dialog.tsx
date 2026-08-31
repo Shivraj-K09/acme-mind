@@ -56,14 +56,17 @@ export function BookingDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
-        render={<Button size="sm" className="rounded-lg">Select</Button>}
+        render={
+          <Button size="sm" className="rounded-lg">
+            Select
+          </Button>
+        }
       />
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Confirm your session</DialogTitle>
           <DialogDescription>
-            {slotLabel}
-            {" "}- you will complete the payment after booking.
+            {slotLabel} - you will complete the payment after booking.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>

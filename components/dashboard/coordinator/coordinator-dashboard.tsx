@@ -44,7 +44,8 @@ export async function CoordinatorDashboard({ name }: { name: string }) {
   const coordinatorSections = [
     {
       title: "Client Roster",
-      description: "Search clients, review history, and register new intake profiles.",
+      description:
+        "Search clients, review history, and register new intake profiles.",
       count: clientsCount ?? 0,
       label: "Total Clients",
       href: "/dashboard/clients",
@@ -53,7 +54,8 @@ export async function CoordinatorDashboard({ name }: { name: string }) {
     },
     {
       title: "Clinical Specialists",
-      description: "Explore therapists, review clinical focus areas, and view bios.",
+      description:
+        "Explore therapists, review clinical focus areas, and view bios.",
       count: therapistsCount ?? 0,
       label: "Available Therapists",
       href: "/dashboard/therapists",
@@ -62,7 +64,8 @@ export async function CoordinatorDashboard({ name }: { name: string }) {
     },
     {
       title: "Match Feed",
-      description: "Monitor client responses, acceptances, and matching pipeline.",
+      description:
+        "Monitor client responses, acceptances, and matching pipeline.",
       count: recommendationsCount ?? 0,
       label: "Total Matches",
       href: "/dashboard/recommendations",
@@ -71,7 +74,8 @@ export async function CoordinatorDashboard({ name }: { name: string }) {
     },
     {
       title: "Scheduled Sessions",
-      description: "Keep track of active client bookings, dates, and session statuses.",
+      description:
+        "Keep track of active client bookings, dates, and session statuses.",
       count: bookingsCount ?? 0,
       label: "Booked Sessions",
       href: "/dashboard/bookings",
@@ -94,7 +98,8 @@ export async function CoordinatorDashboard({ name }: { name: string }) {
             </Badge>
           </div>
           <p className="mt-1.5 text-sm text-muted-foreground max-w-xl">
-            Intake coordination and therapist matching center. Search clients, understand care requirements, and recommend suitable therapists.
+            Intake coordination and therapist matching center. Search clients,
+            understand care requirements, and recommend suitable therapists.
           </p>
         </div>
 

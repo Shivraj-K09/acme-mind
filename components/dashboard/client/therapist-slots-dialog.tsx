@@ -180,7 +180,8 @@ export function TherapistSlotsDialog({
                 No available slots right now
               </p>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Check back soon or contact your coordinator to request a new session time.
+                Check back soon or contact your coordinator to request a new
+                session time.
               </p>
             </div>
           )}
@@ -189,4 +190,3 @@ export function TherapistSlotsDialog({
     </Dialog>
   );
 }
-

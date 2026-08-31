@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "zod";
 
 export const updateProfileSchema = z.object({
   fullName: z.string().trim().min(1, "Name is required."),
@@ -10,4 +10,4 @@ export const updateProfileSchema = z.object({
     .int("Use whole years.")
     .min(0, "Cannot be negative.")
     .max(60, "Experience looks too high."),
-})
+});

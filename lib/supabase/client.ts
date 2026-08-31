@@ -13,6 +13,6 @@ export function createClient(remember = true) {
       cookieOptions: {
         maxAge: remember ? undefined : 86400,
       },
-    }
+    },
   );
 }

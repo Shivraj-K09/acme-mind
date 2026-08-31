@@ -1,11 +1,11 @@
-import type { Metadata } from "next"
-import Link from "next/link"
+import type { Metadata } from "next";
+import Link from "next/link";
 
-import { RegisterForm } from "@/components/register-form"
+import { RegisterForm } from "@/components/register-form";
 
 export const metadata: Metadata = {
   title: "Create account",
-}
+};
 
 export default function RegisterPage() {
   return (
@@ -26,5 +26,5 @@ export default function RegisterPage() {
         </Link>
       </p>
     </div>
-  )
+  );
 }

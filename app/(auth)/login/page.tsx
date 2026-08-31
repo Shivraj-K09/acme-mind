@@ -1,13 +1,13 @@
-import type { Metadata } from "next"
-import Link from "next/link"
+import type { Metadata } from "next";
+import Link from "next/link";
 
-import { LoginForm } from "@/components/login-form"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { LOGIN_ERRORS } from "@/constants"
+import { LoginForm } from "@/components/login-form";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { LOGIN_ERRORS } from "@/constants";
 
 export const metadata: Metadata = {
   title: "Sign in",
-}
+};
 
 export default async function LoginPage({
   searchParams,

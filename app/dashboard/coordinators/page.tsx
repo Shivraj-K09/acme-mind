@@ -1,5 +1,11 @@
 import { createClient } from "@/lib/supabase/server";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import type { CoordinatorRow } from "@/types";
 
 export default async function CoordinatorsPage() {
@@ -45,8 +51,7 @@ export default async function CoordinatorsPage() {
           ))
         ) : (
           <p className="py-6 text-center text-sm text-muted-foreground">
-            No coordinators yet. Promote a user to COORDINATOR to add them
-            here.
+            No coordinators yet. Promote a user to COORDINATOR to add them here.
           </p>
         )}
       </CardContent>

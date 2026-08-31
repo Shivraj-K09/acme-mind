@@ -9,7 +9,7 @@ export default async function TherapistsPage() {
   const { data } = await supabase
     .from("therapists")
     .select(
-      "id, bio, specialization, experience_years, profiles!inner(full_name, email, phone)"
+      "id, bio, specialization, experience_years, profiles!inner(full_name, email, phone)",
     )
     .order("created_at", { ascending: true });
 
@@ -25,11 +25,13 @@ export default async function TherapistsPage() {
               Therapist Directory
             </h1>
             <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
-              {therapists.length} {therapists.length === 1 ? "Specialist" : "Specialists"}
+              {therapists.length}{" "}
+              {therapists.length === 1 ? "Specialist" : "Specialists"}
             </span>
           </div>
           <p className="mt-1 text-sm text-muted-foreground">
-            The licensed therapist network available for client matching and mental health care.
+            The licensed therapist network available for client matching and
+            mental health care.
           </p>
         </div>
       </div>
@@ -55,9 +57,12 @@ export default async function TherapistsPage() {
           <div className="flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary mb-3">
             <Stethoscope className="size-6" />
           </div>
-          <h3 className="text-base font-semibold text-foreground">No therapists registered yet</h3>
+          <h3 className="text-base font-semibold text-foreground">
+            No therapists registered yet
+          </h3>
           <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-            Promote a user to THERAPIST role to add them to the specialist network directory.
+            Promote a user to THERAPIST role to add them to the specialist
+            network directory.
           </p>
         </div>
       )}

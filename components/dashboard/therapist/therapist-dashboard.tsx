@@ -3,7 +3,13 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { AddAvailabilityForm } from "@/components/dashboard/therapist/add-availability-form";
 import { BookingActions } from "@/components/dashboard/booking-actions";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import type { SlotRow, BookingRow } from "@/types";
 import { SLOT_BADGES, BOOKING_BADGES } from "@/constants";
 
@@ -15,7 +21,10 @@ export async function TherapistDashboard({ name }: { name: string }) {
   let slots: SlotRow[] = [];
   let bookings: BookingRow[] = [];
   let therapistId: string | null = null;
-  const profilesMap = new Map<string, { full_name: string | null; email: string | null }>();
+  const profilesMap = new Map<
+    string,
+    { full_name: string | null; email: string | null }
+  >();
 
   if (userData.user) {
     const { data: therapist } = await supabase
@@ -37,14 +46,20 @@ export async function TherapistDashboard({ name }: { name: string }) {
 
       const { data: bookingData } = await supabase
         .from("bookings")
-        .select("id, client_id, therapist_id, status, scheduled_start, clients(id, profile_id, profiles(full_name, email))")
+        .select(
+          "id, client_id, therapist_id, status, scheduled_start, clients(id, profile_id, profiles(full_name, email))",
+        )
         .eq("therapist_id", therapist.id)
         .order("scheduled_start", { ascending: false })
         .limit(10);
 
       const rawBookings = (bookingData ?? []) as unknown as BookingRow[];
       const clientIds = Array.from(
-        new Set(rawBookings.map((b) => b.client_id).filter((id): id is string => Boolean(id)))
+        new Set(
+          rawBookings
+            .map((b) => b.client_id)
+            .filter((id): id is string => Boolean(id)),
+        ),
       );
 
       const admin = createAdminClient();
@@ -56,13 +71,22 @@ export async function TherapistDashboard({ name }: { name: string }) {
           .select("id, profile_id, profiles(full_name, email)")
           .in("id", clientIds);
 
-        clientRows?.forEach((c: { id: string; profile_id?: string; profiles?: { full_name: string | null; email: string | null } | { full_name: string | null; email: string | null }[] | null }) => {
-          const prof = Array.isArray(c.profiles) ? c.profiles[0] : c.profiles;
-          if (prof) {
-            profilesMap.set(c.id, prof);
-            if (c.profile_id) profilesMap.set(c.profile_id, prof);
-          }
-        });
+        clientRows?.forEach(
+          (c: {
+            id: string;
+            profile_id?: string;
+            profiles?:
+              | { full_name: string | null; email: string | null }
+              | { full_name: string | null; email: string | null }[]
+              | null;
+          }) => {
+            const prof = Array.isArray(c.profiles) ? c.profiles[0] : c.profiles;
+            if (prof) {
+              profilesMap.set(c.id, prof);
+              if (c.profile_id) profilesMap.set(c.profile_id, prof);
+            }
+          },
+        );
       }
 
       bookings = rawBookings.map((booking) => {
@@ -165,19 +189,17 @@ export async function TherapistDashboard({ name }: { name: string }) {
                 className="flex items-center justify-between rounded-xl border px-4 py-3"
               >
                 <div>
-                  <p className="text-sm font-medium">
-                    {booking.clientName}
+                  <p className="text-sm font-medium">{booking.clientName}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {new Date(booking.scheduled_start).toLocaleString("en-US", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                      hour: "numeric",
+                      minute: "2-digit",
+                    })}
                   </p>
-                    <p className="text-sm text-muted-foreground">
-                      {new Date(booking.scheduled_start).toLocaleString("en-US", {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric",
-                        hour: "numeric",
-                        minute: "2-digit",
-                      })}
-                    </p>
-                  </div>
+                </div>
                 <div className="flex flex-col items-end gap-2">
                   <Badge
                     className={`shrink-0 ${BOOKING_BADGES[booking.status]}`}

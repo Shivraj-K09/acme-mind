@@ -17,11 +17,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import type {
-  RecommendationRow,
-  SlotOption,
-  ClientBookingRow,
-} from "@/types";
+import type { RecommendationRow, SlotOption, ClientBookingRow } from "@/types";
 
 function formatSlotLabel(start: string, end: string) {
   return `${new Date(start).toLocaleString("en-US", {
@@ -45,13 +41,16 @@ export async function ClientDashboard({ name }: { name: string }) {
 
   let recommendations: RecommendationRow[] = [];
   let bookings: ClientBookingRow[] = [];
-  const therapistProfilesMap = new Map<string, { full_name: string | null; email: string | null }>();
+  const therapistProfilesMap = new Map<
+    string,
+    { full_name: string | null; email: string | null }
+  >();
 
   if (userData.user) {
     const { data } = await supabase
       .from("clients")
       .select(
-        "therapist_recommendations(id, therapist_id, status, therapists(bio, specialization, experience_years, profiles(full_name)))"
+        "therapist_recommendations(id, therapist_id, status, therapists(bio, specialization, experience_years, profiles(full_name)))",
       )
       .eq("profile_id", userData.user.id)
       .maybeSingle();
@@ -62,16 +61,20 @@ export async function ClientDashboard({ name }: { name: string }) {
     const { data: bookingData } = await supabase
       .from("bookings")
       .select(
-        "id, status, scheduled_start, therapist_id, therapists(id, profile_id, profiles(full_name, email))"
+        "id, status, scheduled_start, therapist_id, therapists(id, profile_id, profiles(full_name, email))",
       )
       .order("scheduled_start", { ascending: true });
 
     const rawBookings = (bookingData ?? []) as unknown as (ClientBookingRow & {
-      therapists?: { id?: string; profile_id?: string; profiles?: { full_name: string | null; email: string | null } | null } | null;
+      therapists?: {
+        id?: string;
+        profile_id?: string;
+        profiles?: { full_name: string | null; email: string | null } | null;
+      } | null;
     })[];
 
     const therapistIds = Array.from(
-      new Set(rawBookings.map((b) => b.therapist_id).filter(Boolean))
+      new Set(rawBookings.map((b) => b.therapist_id).filter(Boolean)),
     );
 
     const admin = createAdminClient();
@@ -83,13 +86,22 @@ export async function ClientDashboard({ name }: { name: string }) {
         .select("id, profile_id, profiles(full_name, email)")
         .in("id", therapistIds);
 
-      therapistRows?.forEach((t: { id: string; profile_id?: string; profiles?: { full_name: string | null; email: string | null } | { full_name: string | null; email: string | null }[] | null }) => {
-        const prof = Array.isArray(t.profiles) ? t.profiles[0] : t.profiles;
-        if (prof) {
-          therapistProfilesMap.set(t.id, prof);
-          if (t.profile_id) therapistProfilesMap.set(t.profile_id, prof);
-        }
-      });
+      therapistRows?.forEach(
+        (t: {
+          id: string;
+          profile_id?: string;
+          profiles?:
+            | { full_name: string | null; email: string | null }
+            | { full_name: string | null; email: string | null }[]
+            | null;
+        }) => {
+          const prof = Array.isArray(t.profiles) ? t.profiles[0] : t.profiles;
+          if (prof) {
+            therapistProfilesMap.set(t.id, prof);
+            if (t.profile_id) therapistProfilesMap.set(t.profile_id, prof);
+          }
+        },
+      );
     }
 
     bookings = rawBookings.map((booking) => {
@@ -116,7 +128,7 @@ export async function ClientDashboard({ name }: { name: string }) {
   }
 
   const accepted = recommendations.filter(
-    (recommendation) => recommendation.status === "ACCEPTED"
+    (recommendation) => recommendation.status === "ACCEPTED",
   );
 
   const slotsByTherapist = new Map<string, SlotOption[]>();
@@ -142,9 +154,9 @@ export async function ClientDashboard({ name }: { name: string }) {
         ).map((slot) => ({
           id: slot.id,
           label: formatSlotLabel(slot.start_time, slot.end_time),
-        }))
+        })),
       );
-    })
+    }),
   );
 
   const displayName = name ? name.split(" ")[0] : "there";
@@ -173,7 +185,8 @@ export async function ClientDashboard({ name }: { name: string }) {
             </h1>
           </div>
           <p className="mt-1.5 text-sm text-muted-foreground max-w-xl">
-            Here are your matched therapists and care journey overview. Select a specialist to book sessions or connect with your coordinator.
+            Here are your matched therapists and care journey overview. Select a
+            specialist to book sessions or connect with your coordinator.
           </p>
         </div>
 
@@ -182,16 +195,25 @@ export async function ClientDashboard({ name }: { name: string }) {
           <div className="flex items-center gap-2 rounded-xl border bg-card/80 px-3.5 py-2 shadow-2xs">
             <Sparkles className="size-4 text-primary" />
             <div className="text-left text-xs">
-              <span className="font-bold text-foreground">{recommendations.length}</span>
-              <span className="ml-1 text-muted-foreground">Matched {recommendations.length === 1 ? "Specialist" : "Specialists"}</span>
+              <span className="font-bold text-foreground">
+                {recommendations.length}
+              </span>
+              <span className="ml-1 text-muted-foreground">
+                Matched{" "}
+                {recommendations.length === 1 ? "Specialist" : "Specialists"}
+              </span>
             </div>
           </div>
 
           <div className="flex items-center gap-2 rounded-xl border bg-card/80 px-3.5 py-2 shadow-2xs">
             <Calendar className="size-4 text-primary" />
             <div className="text-left text-xs">
-              <span className="font-bold text-foreground">{bookings.length}</span>
-              <span className="ml-1 text-muted-foreground">{bookings.length === 1 ? "Session" : "Sessions"}</span>
+              <span className="font-bold text-foreground">
+                {bookings.length}
+              </span>
+              <span className="ml-1 text-muted-foreground">
+                {bookings.length === 1 ? "Session" : "Sessions"}
+              </span>
             </div>
           </div>
         </div>
@@ -205,12 +227,14 @@ export async function ClientDashboard({ name }: { name: string }) {
               Your Recommended Therapists
             </h2>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Carefully matched by our clinical team based on your wellness goals.
+              Carefully matched by our clinical team based on your wellness
+              goals.
             </p>
           </div>
           {recommendations.length > 0 && (
             <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
-              {recommendations.length} {recommendations.length === 1 ? "Match" : "Matches"}
+              {recommendations.length}{" "}
+              {recommendations.length === 1 ? "Match" : "Matches"}
             </span>
           )}
         </div>
@@ -263,7 +287,8 @@ export async function ClientDashboard({ name }: { name: string }) {
               No recommendations yet
             </h3>
             <p className="mt-1 max-w-md text-sm text-muted-foreground">
-              Our care coordinator is reviewing your profile to match you with the right licensed therapist.
+              Our care coordinator is reviewing your profile to match you with
+              the right licensed therapist.
             </p>
           </div>
         )}
@@ -279,7 +304,8 @@ export async function ClientDashboard({ name }: { name: string }) {
             <CardHeader className="pb-3">
               <CardTitle className="text-base">Upcoming Appointments</CardTitle>
               <CardDescription>
-                Complete payment to confirm pending appointments or manage existing sessions.
+                Complete payment to confirm pending appointments or manage
+                existing sessions.
               </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-3">
@@ -297,14 +323,17 @@ export async function ClientDashboard({ name }: { name: string }) {
                         {booking.therapistName}
                       </p>
                       <p className="text-xs text-muted-foreground mt-0.5">
-                        {new Date(booking.scheduled_start).toLocaleString("en-US", {
-                          weekday: "short",
-                          day: "numeric",
-                          month: "short",
-                          year: "numeric",
-                          hour: "numeric",
-                          minute: "2-digit",
-                        })}
+                        {new Date(booking.scheduled_start).toLocaleString(
+                          "en-US",
+                          {
+                            weekday: "short",
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                            hour: "numeric",
+                            minute: "2-digit",
+                          },
+                        )}
                       </p>
                     </div>
                   </div>
@@ -345,7 +374,8 @@ export async function ClientDashboard({ name }: { name: string }) {
                 Looking for a different therapist or custom schedule?
               </h3>
               <p className="mt-1 text-sm text-muted-foreground max-w-xl">
-                Our care coordinators work with you directly to understand your schedule, preferences, and clinical needs.
+                Our care coordinators work with you directly to understand your
+                schedule, preferences, and clinical needs.
               </p>
             </div>
           </div>
@@ -364,4 +394,3 @@ export async function ClientDashboard({ name }: { name: string }) {
     </div>
   );
 }
-

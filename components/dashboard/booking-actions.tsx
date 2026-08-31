@@ -59,12 +59,16 @@ export function BookingActions({
       .order("start_time", { ascending: true });
 
     setSlots(
-      ((data ?? []) as unknown as { id: string; start_time: string; end_time: string }[]).map(
-        (slot) => ({
-          id: slot.id,
-          label: formatSlot(slot.start_time, slot.end_time),
-        })
-      )
+      (
+        (data ?? []) as unknown as {
+          id: string;
+          start_time: string;
+          end_time: string;
+        }[]
+      ).map((slot) => ({
+        id: slot.id,
+        label: formatSlot(slot.start_time, slot.end_time),
+      })),
     );
     setSlotsLoaded(true);
   }
@@ -72,7 +76,7 @@ export function BookingActions({
   async function handleCancel(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const reason = String(
-      new FormData(event.currentTarget).get("reason") ?? ""
+      new FormData(event.currentTarget).get("reason") ?? "",
     ).trim();
 
     if (!reason) {

@@ -8,12 +8,12 @@ Built with Next.js (App Router), TypeScript, Tailwind CSS v4, shadcn/ui
 
 ## Roles
 
-| Role | What they do |
-| --- | --- |
-| CLIENT | Sees recommended therapists, accepts a match, books slots, pays |
-| THERAPIST | Manages profile + availability, sees their bookings |
-| COORDINATOR | Searches/creates clients, recommends therapists, follows bookings |
-| ADMIN | System-wide management: coordinators, payments, mark COMPLETED / NO_SHOW |
+| Role        | What they do                                                             |
+| ----------- | ------------------------------------------------------------------------ |
+| CLIENT      | Sees recommended therapists, accepts a match, books slots, pays          |
+| THERAPIST   | Manages profile + availability, sees their bookings                      |
+| COORDINATOR | Searches/creates clients, recommends therapists, follows bookings        |
+| ADMIN       | System-wide management: coordinators, payments, mark COMPLETED / NO_SHOW |
 
 ## Environment
 

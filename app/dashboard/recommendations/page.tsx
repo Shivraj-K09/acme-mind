@@ -1,6 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, ArrowRight, Calendar } from "lucide-react";
 import type { RecommendationRow } from "@/types";
@@ -8,7 +14,7 @@ import { STATUS_BADGES } from "@/constants";
 
 function getPersonName(
   profile?: { full_name?: string | null; email?: string | null } | null,
-  fallback = "Member"
+  fallback = "Member",
 ): string {
   if (profile?.full_name && profile.full_name.trim().length > 0) {
     return profile.full_name.trim();
@@ -26,17 +32,25 @@ export default async function RecommendationsPage() {
   const { data } = await supabase
     .from("therapist_recommendations")
     .select(
-      "id, client_id, therapist_id, status, created_at, clients(id, profile_id, profiles(full_name, email)), therapists(id, profile_id, profiles(full_name, email))"
+      "id, client_id, therapist_id, status, created_at, clients(id, profile_id, profiles(full_name, email)), therapists(id, profile_id, profiles(full_name, email))",
     )
     .order("created_at", { ascending: false });
 
   const rawRecommendations = (data ?? []) as unknown as RecommendationRow[];
 
   const clientIds = Array.from(
-    new Set(rawRecommendations.map((r) => r.client_id).filter((id): id is string => Boolean(id)))
+    new Set(
+      rawRecommendations
+        .map((r) => r.client_id)
+        .filter((id): id is string => Boolean(id)),
+    ),
   );
   const therapistIds = Array.from(
-    new Set(rawRecommendations.map((r) => r.therapist_id).filter((id): id is string => Boolean(id)))
+    new Set(
+      rawRecommendations
+        .map((r) => r.therapist_id)
+        .filter((id): id is string => Boolean(id)),
+    ),
   );
 
   const profilesMap = new Map<
@@ -53,13 +67,22 @@ export default async function RecommendationsPage() {
       .select("id, profile_id, profiles(full_name, email)")
       .in("id", clientIds);
 
-    clientRows?.forEach((c: { id: string; profile_id?: string; profiles?: { full_name: string | null; email: string | null } | { full_name: string | null; email: string | null }[] | null }) => {
-      const prof = Array.isArray(c.profiles) ? c.profiles[0] : c.profiles;
-      if (prof) {
-        profilesMap.set(c.id, prof);
-        if (c.profile_id) profilesMap.set(c.profile_id, prof);
-      }
-    });
+    clientRows?.forEach(
+      (c: {
+        id: string;
+        profile_id?: string;
+        profiles?:
+          | { full_name: string | null; email: string | null }
+          | { full_name: string | null; email: string | null }[]
+          | null;
+      }) => {
+        const prof = Array.isArray(c.profiles) ? c.profiles[0] : c.profiles;
+        if (prof) {
+          profilesMap.set(c.id, prof);
+          if (c.profile_id) profilesMap.set(c.profile_id, prof);
+        }
+      },
+    );
   }
 
   if (therapistIds.length > 0) {
@@ -68,13 +91,22 @@ export default async function RecommendationsPage() {
       .select("id, profile_id, profiles(full_name, email)")
       .in("id", therapistIds);
 
-    therapistRows?.forEach((t: { id: string; profile_id?: string; profiles?: { full_name: string | null; email: string | null } | { full_name: string | null; email: string | null }[] | null }) => {
-      const prof = Array.isArray(t.profiles) ? t.profiles[0] : t.profiles;
-      if (prof) {
-        profilesMap.set(t.id, prof);
-        if (t.profile_id) profilesMap.set(t.profile_id, prof);
-      }
-    });
+    therapistRows?.forEach(
+      (t: {
+        id: string;
+        profile_id?: string;
+        profiles?:
+          | { full_name: string | null; email: string | null }
+          | { full_name: string | null; email: string | null }[]
+          | null;
+      }) => {
+        const prof = Array.isArray(t.profiles) ? t.profiles[0] : t.profiles;
+        if (prof) {
+          profilesMap.set(t.id, prof);
+          if (t.profile_id) profilesMap.set(t.profile_id, prof);
+        }
+      },
+    );
   }
 
   const recommendations = rawRecommendations.map((recommendation) => {
@@ -111,7 +143,8 @@ export default async function RecommendationsPage() {
               Recommendations
             </h1>
             <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
-              {recommendations.length} {recommendations.length === 1 ? "Match" : "Matches"}
+              {recommendations.length}{" "}
+              {recommendations.length === 1 ? "Match" : "Matches"}
             </span>
           </div>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -150,31 +183,33 @@ export default async function RecommendationsPage() {
                       </span>
                     </div>
 
-                      <div className="mt-0.5 flex items-center gap-1.5 text-xs text-muted-foreground">
-                        <Calendar className="size-3 text-muted-foreground" />
-                        <span>
-                          {new Date(recommendation.created_at).toLocaleDateString(
-                            "en-US",
-                            { day: "numeric", month: "short", year: "numeric" }
-                          )}
-                        </span>
-                      </div>
+                    <div className="mt-0.5 flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <Calendar className="size-3 text-muted-foreground" />
+                      <span>
+                        {new Date(recommendation.created_at).toLocaleDateString(
+                          "en-US",
+                          { day: "numeric", month: "short", year: "numeric" },
+                        )}
+                      </span>
                     </div>
                   </div>
-
-                  <Badge
-                    className={`shrink-0 ${STATUS_BADGES[recommendation.status] ?? ""}`}
-                  >
-                    {recommendation.status}
-                  </Badge>
                 </div>
-              ))
+
+                <Badge
+                  className={`shrink-0 ${STATUS_BADGES[recommendation.status] ?? ""}`}
+                >
+                  {recommendation.status}
+                </Badge>
+              </div>
+            ))
           ) : (
             <div className="py-12 text-center">
               <div className="flex size-12 items-center justify-center rounded-2xl bg-muted text-muted-foreground mx-auto mb-3">
                 <Sparkles className="size-6" />
               </div>
-              <h3 className="text-sm font-semibold text-foreground">No recommendations yet</h3>
+              <h3 className="text-sm font-semibold text-foreground">
+                No recommendations yet
+              </h3>
               <p className="text-xs text-muted-foreground mt-1">
                 Recommend a therapist from a client&apos;s profile page.
               </p>

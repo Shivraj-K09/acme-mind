@@ -62,7 +62,8 @@ export async function AdminDashboard({ name }: { name: string }) {
     },
     {
       title: "Therapists Network",
-      description: "Oversee clinicians, credentials, specialties, and schedules.",
+      description:
+        "Oversee clinicians, credentials, specialties, and schedules.",
       count: therapistsCount ?? 0,
       label: "Active Therapists",
       href: "/dashboard/therapists",
@@ -71,7 +72,8 @@ export async function AdminDashboard({ name }: { name: string }) {
     },
     {
       title: "Care Coordinators",
-      description: "Clinical coordinators managing discovery calls and matches.",
+      description:
+        "Clinical coordinators managing discovery calls and matches.",
       count: coordinatorsCount ?? 0,
       label: "Staff Coordinators",
       href: "/dashboard/coordinators",
@@ -80,7 +82,8 @@ export async function AdminDashboard({ name }: { name: string }) {
     },
     {
       title: "Care Recommendations",
-      description: "Live feed of client-therapist recommendations and match statuses.",
+      description:
+        "Live feed of client-therapist recommendations and match statuses.",
       count: recommendationsCount ?? 0,
       label: "Total Matches",
       href: "/dashboard/recommendations",
@@ -89,7 +92,8 @@ export async function AdminDashboard({ name }: { name: string }) {
     },
     {
       title: "Session Bookings",
-      description: "Complete session ledger, reschedule logs, and attendance audit.",
+      description:
+        "Complete session ledger, reschedule logs, and attendance audit.",
       count: bookingsCount ?? 0,
       label: "Booked Sessions",
       href: "/dashboard/bookings",
@@ -121,7 +125,8 @@ export async function AdminDashboard({ name }: { name: string }) {
             </Badge>
           </div>
           <p className="mt-1.5 text-sm text-muted-foreground max-w-xl">
-            System overview and platform governance. Monitor clients, clinicians, care coordination, session bookings, and payments.
+            System overview and platform governance. Monitor clients,
+            clinicians, care coordination, session bookings, and payments.
           </p>
         </div>
 

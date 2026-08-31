@@ -71,8 +71,7 @@ function Vine({ className }: { className?: string }) {
 
   const computedMainLeaves = MAIN_LEAVES.map((leaf, index) => {
     const point = bezierPoint(leaf.t, P0, P1, P2, P3);
-    const rotation =
-      point.angle + leaf.side * (leaf.angle + (index % 3) * 4);
+    const rotation = point.angle + leaf.side * (leaf.angle + (index % 3) * 4);
     const gradient =
       index % 2 === 0 ? "url(#vine-leaf-dark)" : "url(#vine-leaf-light)";
     return {
@@ -84,13 +83,7 @@ function Vine({ className }: { className?: string }) {
   });
 
   const computedBranchLeaves = branchLeaves.map((leaf) => {
-    const point = bezierPoint(
-      leaf.t,
-      branch.a,
-      branch.b,
-      branch.c,
-      branch.d,
-    );
+    const point = bezierPoint(leaf.t, branch.a, branch.b, branch.c, branch.d);
     const rotation = point.angle + leaf.side * leaf.angle;
     return {
       leafD: leafPath(leaf.len),
@@ -141,10 +134,7 @@ function Vine({ className }: { className?: string }) {
       />
 
       {computedMainLeaves.map((leaf, index) => (
-        <g
-          key={`main-${index}`}
-          transform={leaf.transform}
-        >
+        <g key={`main-${index}`} transform={leaf.transform}>
           <path
             d={leaf.leafD}
             fill={leaf.gradient}
@@ -164,10 +154,7 @@ function Vine({ className }: { className?: string }) {
       ))}
 
       {computedBranchLeaves.map((leaf, index) => (
-        <g
-          key={`branch-${index}`}
-          transform={leaf.transform}
-        >
+        <g key={`branch-${index}`} transform={leaf.transform}>
           <path
             d={leaf.leafD}
             fill="url(#vine-leaf-dark)"

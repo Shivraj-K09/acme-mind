@@ -9,7 +9,9 @@ export const metadata: Metadata = {
 export default function SetPasswordPage() {
   return (
     <div>
-      <h1 className="text-3xl font-semibold tracking-tight">Set your password</h1>
+      <h1 className="text-3xl font-semibold tracking-tight">
+        Set your password
+      </h1>
       <div className="mt-8">
         <SetPasswordForm />
       </div>

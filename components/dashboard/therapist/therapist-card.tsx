@@ -1,6 +1,14 @@
 "use client";
 
-import { Award, CheckCircle2, HeartHandshake, Sparkles, Video, Mail, Phone } from "lucide-react";
+import {
+  Award,
+  CheckCircle2,
+  HeartHandshake,
+  Sparkles,
+  Video,
+  Mail,
+  Phone,
+} from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
@@ -41,7 +49,7 @@ export function TherapistCard({
     <Card
       className={cn(
         "group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border/80 bg-card/90 shadow-xs transition-all duration-300 hover:border-primary/40 hover:shadow-md",
-        className
+        className,
       )}
     >
       {/* Subtle top decorative gradient line */}
@@ -87,7 +95,10 @@ export function TherapistCard({
           <div className="inline-flex items-center gap-1.5 rounded-lg border bg-muted/40 px-2.5 py-1 text-muted-foreground">
             <Award className="size-3.5 text-primary" />
             <span>
-              <strong className="font-semibold text-foreground">{expYears}</strong> {expYears === 1 ? "yr" : "yrs"} experience
+              <strong className="font-semibold text-foreground">
+                {expYears}
+              </strong>{" "}
+              {expYears === 1 ? "yr" : "yrs"} experience
             </span>
           </div>
 
@@ -99,7 +110,10 @@ export function TherapistCard({
           {availableSlotsCount !== undefined && availableSlotsCount > 0 && (
             <div className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-500/10 px-2.5 py-1 text-emerald-700 dark:text-emerald-300 font-medium">
               <Sparkles className="size-3.5 text-emerald-600" />
-              <span>{availableSlotsCount} {availableSlotsCount === 1 ? "slot" : "slots"} available</span>
+              <span>
+                {availableSlotsCount}{" "}
+                {availableSlotsCount === 1 ? "slot" : "slots"} available
+              </span>
             </div>
           )}
         </div>
@@ -109,14 +123,15 @@ export function TherapistCard({
           <p
             className={cn(
               "mt-3.5 text-sm leading-relaxed text-muted-foreground",
-              compact ? "line-clamp-2" : "line-clamp-3"
+              compact ? "line-clamp-2" : "line-clamp-3",
             )}
           >
             &ldquo;{bio}&rdquo;
           </p>
         ) : (
           <p className="mt-3.5 text-sm italic text-muted-foreground/80">
-            Specialized mental health care professional committed to evidence-based wellness.
+            Specialized mental health care professional committed to
+            evidence-based wellness.
           </p>
         )}
 
@@ -140,9 +155,7 @@ export function TherapistCard({
 
         {/* Action Buttons Footer */}
         {actions && (
-          <div className="mt-4 border-t border-border/60 pt-3.5">
-            {actions}
-          </div>
+          <div className="mt-4 border-t border-border/60 pt-3.5">{actions}</div>
         )}
       </CardContent>
     </Card>

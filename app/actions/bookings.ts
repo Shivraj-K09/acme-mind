@@ -12,7 +12,7 @@ import { SESSION_PRICE } from "@/constants";
  * (triggers + partial unique index from the migrations).
  */
 export async function createBooking(
-  slotId: string
+  slotId: string,
 ): Promise<{ error?: string }> {
   const supabase = await createClient();
 
@@ -67,7 +67,7 @@ export async function createBooking(
  * writes are reserved for the system) and confirms the booking.
  */
 export async function payBooking(
-  bookingId: string
+  bookingId: string,
 ): Promise<{ error?: string }> {
   const supabase = await createClient();
 
@@ -110,7 +110,7 @@ export async function payBooking(
         autoRefreshToken: false,
         persistSession: false,
       },
-    }
+    },
   );
 
   const { error: paymentError } = await admin.from("payments").insert({
@@ -214,7 +214,8 @@ export async function cancelBooking(input: {
   }
 
   // 24+ hours before the session: full mock refund
-  const hoursUntil = (new Date(booking.scheduled_start).getTime() - Date.now()) / 3600000;
+  const hoursUntil =
+    (new Date(booking.scheduled_start).getTime() - Date.now()) / 3600000;
 
   if (hoursUntil >= 24) {
     const admin = createSupabaseAdminClient(
@@ -225,7 +226,7 @@ export async function cancelBooking(input: {
           autoRefreshToken: false,
           persistSession: false,
         },
-      }
+      },
     );
 
     const { data: payment } = await admin

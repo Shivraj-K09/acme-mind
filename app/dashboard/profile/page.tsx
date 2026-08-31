@@ -4,7 +4,13 @@ import { createClient } from "@/lib/supabase/server";
 import { getProfile } from "@/lib/supabase/profile";
 import { ProfileForm } from "@/components/dashboard/profile/profile-form";
 import { TherapistCard } from "@/components/dashboard/therapist/therapist-card";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Sparkles } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -69,9 +75,14 @@ export default async function ProfilePage() {
           <TherapistCard
             id={therapist?.id ?? "preview"}
             name={profile.full_name || "Dr. Therapist"}
-            specialization={therapist?.specialization || "General Clinical Therapy"}
+            specialization={
+              therapist?.specialization || "General Clinical Therapy"
+            }
             experienceYears={therapist?.experience_years ?? 0}
-            bio={therapist?.bio || "Your clinical approach and background will appear here for clients."}
+            bio={
+              therapist?.bio ||
+              "Your clinical approach and background will appear here for clients."
+            }
             email={user.email}
             phone={profile.phone}
           />

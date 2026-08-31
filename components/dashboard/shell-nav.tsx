@@ -27,10 +27,19 @@ function getNavIcon(item: NavItem): ElementType {
   if (lowerLabel.includes("therapist")) return HeartHandshake;
   if (lowerLabel.includes("coordinator")) return ShieldCheck;
   if (lowerLabel.includes("recommend")) return Sparkles;
-  if (lowerLabel.includes("booking") || lowerLabel.includes("session") || lowerLabel.includes("calendar"))
+  if (
+    lowerLabel.includes("booking") ||
+    lowerLabel.includes("session") ||
+    lowerLabel.includes("calendar")
+  )
     return Calendar;
-  if (lowerLabel.includes("payment") || lowerLabel.includes("bill")) return CreditCard;
-  if (lowerLabel.includes("profile") || lowerLabel.includes("account") || lowerLabel.includes("user"))
+  if (lowerLabel.includes("payment") || lowerLabel.includes("bill"))
+    return CreditCard;
+  if (
+    lowerLabel.includes("profile") ||
+    lowerLabel.includes("account") ||
+    lowerLabel.includes("user")
+  )
     return User;
 
   return Compass;
@@ -47,13 +56,15 @@ export function ShellNav({
 }) {
   const pathname = usePathname();
 
-  const activeHref = items
-    .filter(
-      (item) =>
-        pathname === item.href ||
-        (item.href !== "/dashboard" && pathname.startsWith(`${item.href}/`))
-    )
-    .sort((a, b) => b.href.length - a.href.length)[0]?.href ?? items.find((i) => i.href === pathname)?.href;
+  const activeHref =
+    items
+      .filter(
+        (item) =>
+          pathname === item.href ||
+          (item.href !== "/dashboard" && pathname.startsWith(`${item.href}/`)),
+      )
+      .sort((a, b) => b.href.length - a.href.length)[0]?.href ??
+    items.find((i) => i.href === pathname)?.href;
 
   const navItems = items.map((item) => ({
     ...item,
@@ -73,7 +84,7 @@ export function ShellNav({
               "inline-flex shrink-0 items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-medium whitespace-nowrap transition-all duration-200",
               item.active
                 ? "bg-primary text-primary-foreground shadow-xs font-semibold"
-                : "bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground"
+                : "bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground",
             )}
           >
             <item.Icon className="size-3.5 shrink-0" />
@@ -84,7 +95,7 @@ export function ShellNav({
                   "ml-1 rounded-full px-1.5 py-0.2 text-[10px] font-bold",
                   item.active
                     ? "bg-primary-foreground/20 text-primary-foreground"
-                    : "bg-background text-muted-foreground"
+                    : "bg-background text-muted-foreground",
                 )}
               >
                 {item.badge}
@@ -107,7 +118,7 @@ export function ShellNav({
             "group relative flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all duration-200 select-none",
             item.active
               ? "bg-primary/10 text-primary font-semibold shadow-xs"
-              : "text-muted-foreground hover:bg-muted/70 hover:text-foreground"
+              : "text-muted-foreground hover:bg-muted/70 hover:text-foreground",
           )}
         >
           {item.active && (
@@ -121,24 +132,24 @@ export function ShellNav({
               "size-4.5 shrink-0 transition-transform duration-200 group-hover:scale-110",
               item.active
                 ? "text-primary"
-                : "text-muted-foreground/80 group-hover:text-foreground"
+                : "text-muted-foreground/80 group-hover:text-foreground",
             )}
-            />
-            <span className="truncate">{item.label}</span>
-            {item.badge !== undefined && (
-              <span
-                className={cn(
-                  "ml-auto rounded-full px-2 py-0.5 text-[10px] font-bold",
-                  item.active
-                    ? "bg-primary/20 text-primary"
-                    : "bg-muted text-muted-foreground group-hover:bg-background"
-                )}
-              >
-                {item.badge}
-              </span>
-            )}
-          </Link>
-        ))}
-      </nav>
+          />
+          <span className="truncate">{item.label}</span>
+          {item.badge !== undefined && (
+            <span
+              className={cn(
+                "ml-auto rounded-full px-2 py-0.5 text-[10px] font-bold",
+                item.active
+                  ? "bg-primary/20 text-primary"
+                  : "bg-muted text-muted-foreground group-hover:bg-background",
+              )}
+            >
+              {item.badge}
+            </span>
+          )}
+        </Link>
+      ))}
+    </nav>
   );
 }

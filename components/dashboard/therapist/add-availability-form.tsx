@@ -144,15 +144,11 @@ export function AddAvailabilityForm() {
                 variant="outline"
                 className={cn(
                   "h-9! flex-1 justify-start rounded-xl bg-muted/50 px-3 font-normal",
-                  !date && "text-muted-foreground"
+                  !date && "text-muted-foreground",
                 )}
               >
                 <CalendarIcon className="size-4" />
-                {date ? (
-                  format(date, "MMM d, yyyy")
-                ) : (
-                  <span>Pick a date…</span>
-                )}
+                {date ? format(date, "MMM d, yyyy") : <span>Pick a date…</span>}
               </Button>
             }
           />
@@ -162,7 +158,9 @@ export function AddAvailabilityForm() {
               selected={date}
               onSelect={handleSelect}
               disabled={{ before: new Date() }}
-              startMonth={new Date(new Date().getFullYear(), new Date().getMonth(), 1)}
+              startMonth={
+                new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+              }
               endMonth={new Date(new Date().getFullYear() + 2, 11, 31)}
               captionLayout="dropdown"
             />
@@ -175,11 +173,7 @@ export function AddAvailabilityForm() {
           disabled={!date}
         >
           <SelectTrigger className="h-9! flex-1 rounded-xl bg-muted/50 py-0 text-muted-foreground sm:w-auto sm:flex-none">
-            {startTime ? (
-              formatTimeLabel(startTime)
-            ) : (
-              <span>Start time…</span>
-            )}
+            {startTime ? formatTimeLabel(startTime) : <span>Start time…</span>}
           </SelectTrigger>
           <SelectContent className="min-w-0 max-h-72 w-(--anchor-width) [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {startOptions.map((time) => (
