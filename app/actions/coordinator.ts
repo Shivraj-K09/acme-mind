@@ -1,8 +1,9 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
-import { createClient as createSupabaseAdminClient } from "@supabase/supabase-js";
 import { z } from "zod";
+
+import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
 
 const recommendTherapistSchema = z.object({
   clientId: z.string().uuid(),
@@ -64,16 +65,11 @@ export async function inviteClient(input: {
     return { error: "Please enter a valid name and email address." };
   }
 
-  const supabase = createSupabaseAdminClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-      },
-    },
-  );
+  const supabase = createAdminClient();
+
+  if (!supabase) {
+    return { error: "Could not send the invite. Please try again." };
+  }
 
   const { data, error } = await supabase.auth.admin.inviteUserByEmail(
     parsed.data.email,

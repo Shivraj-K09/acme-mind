@@ -39,6 +39,7 @@ export default async function BookingsPage({
   const isAdmin = profile.role === "ADMIN";
   const { error } = await searchParams;
   const supabase = await createClient();
+
   const { data: bookingsData } = await supabase
     .from("bookings")
     .select(

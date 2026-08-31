@@ -1,10 +1,10 @@
 "use server";
 
 import { z } from "zod";
-import { createClient as createSupabaseAdminClient } from "@supabase/supabase-js";
-
 import { createClient } from "@/lib/supabase/server";
 import { SESSION_PRICE } from "@/constants";
+
+import { createAdminClient } from "@/lib/supabase/admin";
 
 /**
  * Creates a PENDING booking for the selected slot. Slot availability, the
@@ -102,16 +102,11 @@ export async function payBooking(
     return { error: "Only pending bookings can be paid." };
   }
 
-  const admin = createSupabaseAdminClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-      },
-    },
-  );
+  const admin = createAdminClient();
+
+  if (!admin) {
+    return { error: "Server configuration error. Please try again." };
+  }
 
   const { error: paymentError } = await admin.from("payments").insert({
     booking_id: booking.id,
@@ -218,16 +213,11 @@ export async function cancelBooking(input: {
     (new Date(booking.scheduled_start).getTime() - Date.now()) / 3600000;
 
   if (hoursUntil >= 24) {
-    const admin = createSupabaseAdminClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-      {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false,
-        },
-      },
-    );
+    const admin = createAdminClient();
+
+    if (!admin) {
+      return { error: "Server configuration error. Please try again." };
+    }
 
     const { data: payment } = await admin
       .from("payments")

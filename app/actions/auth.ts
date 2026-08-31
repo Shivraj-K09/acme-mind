@@ -1,9 +1,9 @@
 "use server";
 
-import { createClient as createSupabaseAdminClient } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 /**
  * Supabase returns the same "invalid credentials" error for unknown emails
@@ -11,16 +11,11 @@ import { createClient } from "@/lib/supabase/server";
  * form tell the user which one is actually wrong.
  */
 export async function checkEmailExists(email: string): Promise<boolean> {
-  const supabase = createSupabaseAdminClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-      },
-    },
-  );
+  const supabase = createAdminClient();
+
+  if (!supabase) {
+    throw new Error("Could not verify the account. Please try again.");
+  }
 
   const { data, error } = await supabase
     .from("profiles")
