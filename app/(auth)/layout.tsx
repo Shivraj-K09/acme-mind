@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 
+import authHeroImage from "@/public/acme-mind.webp";
 import { Vine } from "@/components/vine";
 
 export const metadata: Metadata = {
@@ -17,14 +18,15 @@ export default function AuthLayout({
 }) {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
-      <div className="relative hidden h-screen overflow-hidden bg-muted lg:block">
+      <div className="relative hidden h-screen overflow-hidden bg-[#f4efe8] lg:block">
         <Image
-          src="/acme-miind.webp"
+          src={authHeroImage}
           alt="Acme Mind"
-          width={2172}
-          height={2896}
+          fill
           priority
-          className="h-full w-full object-cover object-center"
+          placeholder="blur"
+          sizes="(min-width: 1024px) 50vw, 100vw"
+          className="object-cover object-center"
         />
       </div>
       <main className="relative flex items-center justify-center overflow-hidden px-6 py-12 shadow-[-24px_0_48px_-12px_rgba(0,0,0,0.12)] sm:px-10">

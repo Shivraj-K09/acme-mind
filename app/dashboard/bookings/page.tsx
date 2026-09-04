@@ -1,8 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
-import { getProfile } from "@/lib/supabase/profile";
 import { markBooking } from "@/app/actions/admin";
-import { STATUS_BADGES } from "@/constants";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,8 +9,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Calendar, ArrowRight, Clock, ShieldAlert } from "lucide-react";
+import { STATUS_BADGES } from "@/constants";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getProfile } from "@/lib/supabase/profile";
+import { createClient } from "@/lib/supabase/server";
 import type { BookingRow } from "@/types";
+import { ArrowRight, Calendar, Clock, ShieldAlert } from "lucide-react";
 
 function getPersonName(
   profile?: { full_name?: string | null; email?: string | null } | null,

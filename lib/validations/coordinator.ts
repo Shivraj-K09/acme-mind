@@ -6,5 +6,5 @@ export const createClientSchema = z.object({
     .string()
     .trim()
     .min(1, "Email is required.")
-    .email("Please enter a valid email address."),
+    .pipe(z.email("Please enter a valid email address.")),
 });

@@ -1,13 +1,12 @@
 "use server";
 
-import { z } from "zod";
-
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
+import { z } from "zod";
 
 const recommendTherapistSchema = z.object({
-  clientId: z.string().uuid(),
-  therapistId: z.string().uuid(),
+  clientId: z.uuid(),
+  therapistId: z.uuid(),
 });
 
 export async function recommendTherapist(input: {
@@ -47,7 +46,7 @@ const inviteClientSchema = z.object({
     .string()
     .trim()
     .min(1, "Email is required.")
-    .email("Please enter a valid email address."),
+    .pipe(z.email("Please enter a valid email address.")),
 });
 
 /**

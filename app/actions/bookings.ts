@@ -1,10 +1,9 @@
 "use server";
 
-import { z } from "zod";
-import { createClient } from "@/lib/supabase/server";
 import { SESSION_PRICE } from "@/constants";
-
 import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
+import { z } from "zod";
 
 /**
  * Creates a PENDING booking for the selected slot. Slot availability, the
@@ -36,7 +35,7 @@ export async function createBooking(
     .from("availability_slots")
     .select("therapist_id, start_time, end_time, status")
     .eq("id", slotId)
-    .maybeSingle();
+    .maybeSingle(); // it gets one record if it exists or null if doesn't without throwing an error.
 
   if (!slot || slot.status !== "AVAILABLE") {
     return { error: "This slot is no longer available." };
@@ -144,7 +143,7 @@ export async function cancelBooking(input: {
 }): Promise<{ error?: string }> {
   const parsed = z
     .object({
-      bookingId: z.string().uuid(),
+      bookingId: z.uuid(),
       reason: z.string().trim().min(1, "Cancellation reason is required."),
     })
     .safeParse(input);
@@ -252,8 +251,8 @@ export async function rescheduleBooking(input: {
 }): Promise<{ error?: string }> {
   const parsed = z
     .object({
-      bookingId: z.string().uuid(),
-      newSlotId: z.string().uuid(),
+      bookingId: z.uuid(),
+      newSlotId: z.uuid(),
     })
     .safeParse(input);
 

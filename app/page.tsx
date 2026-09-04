@@ -233,7 +233,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="how" className="mx-auto w-full max-w-6xl px-6 py-28">
+        <section id="how" className="mx-auto w-full max-w-6xl scroll-mt-16 px-6 py-28">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-primary">
             How it works
           </p>
@@ -263,7 +263,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="therapists" className="border-y bg-secondary/40">
+        <section id="therapists" className="scroll-mt-16 border-y bg-secondary/40">
           <div className="mx-auto w-full max-w-6xl px-6 py-28">
             <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
               <h2
@@ -303,7 +303,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="px-6 pb-28 pt-28">
+        <section id="care" className="scroll-mt-16 px-6 pb-28 pt-28">
           <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] bg-primary px-6 py-24 text-center text-primary-foreground">
             <div
               aria-hidden="true"

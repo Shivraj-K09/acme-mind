@@ -1,7 +1,6 @@
-import { NextResponse, type NextRequest } from "next/server";
-import type { EmailOtpType } from "@supabase/supabase-js";
-
 import { createClient } from "@/lib/supabase/server";
+import type { EmailOtpType } from "@supabase/supabase-js";
+import { NextResponse, type NextRequest } from "next/server";
 
 /**
  * Exchanges the token from auth emails (invite, confirmation, recovery)

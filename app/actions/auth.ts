@@ -1,9 +1,8 @@
 "use server";
 
-import { redirect } from "next/navigation";
-
-import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
 /**
  * Supabase returns the same "invalid credentials" error for unknown emails
