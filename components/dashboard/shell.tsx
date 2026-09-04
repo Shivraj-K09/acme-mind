@@ -188,9 +188,9 @@ export function Shell({
         </header>
 
         {/* Mobile Horizontal Quick Nav */}
-        <div className="border-b bg-muted/20 px-4 py-2 lg:hidden">
+        {/* <div className="border-b bg-muted/20 px-4 py-2 lg:hidden">
           <ShellNav items={nav} orientation="horizontal" />
-        </div>
+        </div> */}
 
         {/* Main page content */}
         <main className="flex-1 px-6 py-8 lg:px-10">{children}</main>

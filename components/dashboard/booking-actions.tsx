@@ -1,10 +1,9 @@
 "use client";
 
-import * as React from "react";
 import { useRouter } from "next/navigation";
+import * as React from "react";
 
 import { cancelBooking, rescheduleBooking } from "@/app/actions/bookings";
-import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,6 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/toast";
+import { createClient } from "@/lib/supabase/client";
 import type { SlotOption } from "@/types";
 
 function formatSlot(start: string, end: string) {
